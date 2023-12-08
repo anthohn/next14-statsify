@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Spotify Stats
 
-## Getting Started
+This project was created to apply my Next.js and NextAuth.js knowledge by creating a Spotify statistics tracking web app.
 
-First, run the development server:
+## Overview
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Spotify Stats is a personalized statistics tracking web application that allows users to connect their Spotify account and visualize their music listening habits. With this application, users can view their top artists, top tracks, favorite genres, and recently played songs.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Planned Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Spotify Authentication**: Users can log in with their Spotify accounts using the Spotify API.
+- **Top Artists and Tracks**: Display the user's most listened-to artists and tracks.
+- **Favorite Genres**: Analyze and showcase the user's top genres based on listening history.
+- **Recently Played**: Provide a list of recently played songs for quick reference.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Technologies Used
 
-## Learn More
+- [Next.js](https://nextjs.org/) - React framework for server-rendered React applications.
+- [NextAuth.js](https://next-auth.js.org/) - Authentication library for Next.js.
+- [Spotify API](https://developer.spotify.com/documentation/web-api/) - Access Spotify user data.
 
-To learn more about Next.js, take a look at the following resources:
+## Development Environment
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Clone the repository:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+    ```bash
+    git clone https://github.com/anthohn/spotify-stats.git
+    ```
 
-## Deploy on Vercel
+2. Install dependencies:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+    ```bash
+    cd spotify-stats
+    npm install
+    ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+3. Set up environment variables:
+
+    Create a `.env.local` file in the root directory and add your Spotify API credentials:
+
+    ```env
+    SPOTIFY_CLIENT_ID=your-client-id
+    SPOTIFY_CLIENT_SECRET=your-client-secret
+    NEXTAUTH_URL=http://localhost:3000
+    ```
+
+    Replace `your-client-id` and `your-client-secret` with your Spotify application credentials.
+
+4. Run the application:
+
+    ```bash
+    npm run dev
+    ```
+
+5. Open your browser and navigate to [http://localhost:3000](http://localhost:3000).
+
+## Contributing
+
+Contributions are welcome! If you find any bugs or have suggestions for improvement, please open an issue or submit a pull request.
