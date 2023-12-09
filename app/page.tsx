@@ -1,7 +1,9 @@
 import { getServerSession } from "next-auth"
+import { getToken } from "./spotify";
 
 export default async function Page() {
   const session = await getServerSession();
+  const spotifyToken = await getToken();
 
     return (
       <>
@@ -10,6 +12,7 @@ export default async function Page() {
             <div>
               {session?.user?.email} <br/>
               {session?.user?.name}
+              {spotifyToken}
             </div>
           ) : 
           (
