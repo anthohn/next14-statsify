@@ -16,7 +16,7 @@ function AuthButton() {
     }
     return (
       <>
-        <button onClick={() => signIn()}>Sign in</button>
+        <button onClick={() => signIn("spotify")}>Sign in</button>
       </>
     );
   }
