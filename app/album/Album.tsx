@@ -8,7 +8,7 @@ import {
   CardTitle,
   CardFooter,
 } from "@/app/components/ui/card";
-import { Button } from "@/app/components/ui/button";
+// import { Button } from "@/app/components/ui/button";
 import { buttonVariants } from "@/app/components/ui/button";
 
 import { useAlbumsContext } from "./AlbumProvider";
@@ -57,7 +57,7 @@ export default function Album({
         </a>
       </CardContent>
       <CardFooter className="flex justify-end">
-        {allowAdd && (
+        {/* {allowAdd && (
           <Button
             onClick={onAdd}
             className={buttonVariants({
@@ -66,7 +66,7 @@ export default function Album({
           >
             Add To Saved Albums
           </Button>
-        )}
+        )} */}
       </CardFooter>
     </Card>
   );
