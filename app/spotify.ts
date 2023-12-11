@@ -67,6 +67,7 @@ async function getToken() {
         .then((res) => res.json())
         .then((res) => res.access_token);
     }
+    console.log("Token :", cachedToken); // Ajout du console.log du résultat de la requête
     return cachedToken;
   });
 }
@@ -84,7 +85,8 @@ export async function getAlbumInfo() {
     if (!albumCache[cacheKey]) {
       console.log("Fetching user albums");
       albumCache[cacheKey] = fetch(
-        'https://api.spotify.com/v1/search?q=remaster%2520track%3ADoxy%2520artist%3AMiles%2520Davis&type=album',
+        'https://api.spotify.com/v1/search?q=More+than+just+a+dream&type=album&market=CH&limit=10',
+        // 'https://api.spotify.com/v1/users/anthonyhohn/playlists',
         {
           headers: {
             Authorization: `Bearer ${token}`,
