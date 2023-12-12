@@ -1,24 +1,13 @@
-import { getServerSession } from "next-auth"
+import { getServerSession } from "next-auth";
 import { getToken } from "./spotify";
+import HomeSection from "@/app/components/HomeSection";
 
 export default async function Page() {
-  const session = await getServerSession();
-  const spotifyToken = await getToken();
-
     return (
       <>
-        {
-        session?.user? (
-            <div>
-              {session?.user?.email} <br/>
-              {session?.user?.name}
-              {spotifyToken}
-            </div>
-          ) : 
-          (
-            <div>Not logged in</div>
-          )
-        }
+      <main className="flex flex-col mx-auto max-w-6xl">
+          <HomeSection />
+        </main>
       </>
     )
   }
