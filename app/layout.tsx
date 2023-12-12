@@ -4,7 +4,7 @@ import { Inter } from 'next/font/google'
 import { getServerSession } from 'next-auth';
 
 import SessionProvider  from './components/SessionProvider';
-import NavMenu from './components/NavMenu';
+import Header from './components/Header';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -26,7 +26,7 @@ export default async function RootLayout({
       <div className="bg-green-200 absolute top-[-1rem] -z-10 left-[-35rem] h-[31.25rem] w-[50rem] rounded-full blur-[10rem] sm:w-[68.75rem] md:left-[-33rem] lg:left-[-28rem] xl:left-[-15rem] 2xl:left-[-5rem] dark:bg-[#b1a5a5]"></div>
 
         <SessionProvider session={session}>
-            <NavMenu />
+            <Header />
             <main className='flex flex-col mx-auto max-w-6xl'>
               {children}
             </main>

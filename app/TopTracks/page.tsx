@@ -1,8 +1,73 @@
-export default function TopTracks() {
-   return (
-     <h1>
-        TopTracks
-     </h1>
+'use client'
+import React, { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 
-    );
-  }
+function TopTracks() {
+  const { data: session } = useSession();
+  const [topTracks, setTopTracks] = useState([]);
+  const [timeRange, setTimeRange] = useState('short_term'); // short_term, medium_term, long_term
+
+  useEffect(() => {
+    const getTopTracks = async () => {
+      if (!session) {
+        console.log("L'utilisateur n'est pas connecté");
+        return;
+      }
+
+      const token = session.accessToken;
+
+      try {
+        const response = await fetch(`https://api.spotify.com/v1/me/top/tracks?time_range=${timeRange}&limit=30`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`API call failed with status ${response.status}`);
+        }
+
+        const data = await response.json();
+        setTopTracks(data.items);
+      } catch (error) {
+        console.error("Error fetching top tracks:", error);
+      }
+    };
+
+    getTopTracks();
+  }, [session, timeRange]); // Ajouter timeRange comme dépendance
+
+  return (
+    <>
+      <h1 className="text-center text-3xl font-medium p-4 mx-auto w-6/12 mt-40 ">Top Tracks</h1>
+
+      <div className="">  
+      <div className="flex justify-between text-center mb-4">
+          <button onClick={() => setTimeRange('short_term')} className="flex-grow rounded-lg p-2 border bg-white m-1">
+            Last 4 weeks
+          </button>
+          <button onClick={() => setTimeRange('medium_term')} className="flex-grow rounded-lg p-2 border bg-white m-1">
+            Last 6 months
+          </button>
+          <button onClick={() => setTimeRange('long_term')} className="flex-grow rounded-lg p-2 border bg-white m-1">
+            All time
+          </button>
+        </div> 
+
+        <div className="flex flex-wrap justify-center">
+          {topTracks.map((track, index) => (
+            <a key={track.id} className="flex justify-center"> 
+              <div className="shadow-2xl hover:scale-105 transition w-80 m-8 h-80 rounded-xl flex flex-col space-y-4 items-center justify-center">
+                <p className="text-xl font-bold">{index + 1}. {track.name}</p>
+                <img src={track.album.images[0]?.url} alt={track.name} className="w-56 h-56 rounded-xl" />
+                <p className="text-sm text-gray-600">by {track.artists.map(artist => artist.name).join(', ')}</p>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+}
+export default TopTracks;

@@ -3,13 +3,13 @@ import Link from "next/link";
 
 export default function HomeButton() {
     const { data: session } = useSession();
-    const linkClasses = "hover:scale-105 transition bg-green-600 text-white py-2 px-3 rounded-lg hover:bg-green-700";
+    const linkClasses = "hover:scale-105 transition bg-green-600 text-white py-2 px-3 rounded-2xl hover:bg-green-700";
   
     if (!session) {
       return (
         <>
           <p className="mt-4">Please login with your spotify account, to see your track or artist ranking!</p>
-          <button className="mt-4 bg-green-600 text-white py-2 px-3 rounded-lg hover:bg-green-700 w-60" onClick={() => signIn("spotify")}>Login with Spotify</button>
+          <button className="mt-4 bg-green-600 text-white py-2 px-3 rounded-2xl hover:bg-green-700 w-60" onClick={() => signIn("spotify")}>Login with Spotify</button>
         </>
       );
     }
@@ -23,7 +23,6 @@ export default function HomeButton() {
         <div className="flex space-x-4 mt-4">
           <Link className={linkClasses} href="/TopTracks">Top Tracks</Link>
           <Link className={linkClasses} href="/TopArtists">Top Artists</Link>
-          <Link className={linkClasses} href="/TopGenres">Top Genres</Link>
         </div>
       </>
     )

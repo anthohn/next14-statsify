@@ -40,14 +40,14 @@ function TopTracks() {
 
   return (
     <div className="mt-40">
-      <h1 className="text-center text-4xl font-medium shadow-2xl bg-white rounded-2xl p-4 mx-auto w-6/12">Top Artists (Last 4 weeks)</h1>
+      <h1 className="text-center text-3xl font-medium p-4 mx-auto w-6/12">Top Artists (Last 4 weeks)</h1>
 
       <div className="flex flex-wrap justify-center">
-        {topArtists.map((artist) => (
+        {topArtists.map((artist, index) => (
           <a key={artist.id} className="flex justify-center"> 
-            <div className="bg-green-200 shadow-2xl hover:scale-105 hover:bg-green-300 transition w-80 m-8 h-80 rounded-xl flex flex-col space-y-4 items-center justify-center"> {/* Centrer le contenu de la carte */}
+            <div className="shadow-2xl hover:scale-105 transition w-80 m-8 h-80 rounded-xl flex flex-col space-y-4 items-center justify-center">
               <img src={artist.images[0]?.url} alt={artist.name} className="w-56 h-56 rounded-xl" />
-              <p className="text-xl font-medium">{artist.name}</p>
+              <p className="text-xl font-bold">{index + 1}. {artist.name}</p>
             </div>
           </a>
         ))}
