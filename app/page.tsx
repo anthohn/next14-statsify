@@ -1,9 +1,13 @@
 import { getServerSession } from "next-auth";
-export default async function Page() {
-  const session = await getServerSession();
+import { getToken } from "./spotify";
+import HomeSection from "@/app/components/HomeSection";
 
-  return (
-    <>
-    </>
-  );
-}
+export default async function Page() {
+    return (
+      <>
+      <main className=" flex flex-col mx-auto max-w-6xl">
+          <HomeSection />
+        </main>
+      </>
+    )
+  }

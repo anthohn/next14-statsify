@@ -36,23 +36,30 @@ Spotify Stats is a personalized statistics tracking web application that allows 
 
 3. Set up environment variables:
 
-    Create a `.env.local` file in the root directory and add your Spotify API credentials:
+    Create a `.env` file in the root directory and add your Spotify API credentials:
 
     ```env
-    SPOTIFY_CLIENT_ID=your-client-id
-    SPOTIFY_CLIENT_SECRET=your-client-secret
-    NEXTAUTH_URL=http://localhost:3000
+    NEXTAUTH_URL="http://localhost:3000"
+    NEXTAUTH_SECRET="your-next-auth-secret"
+
+    SPOTIFY_CLIENT_ID="your-client-id"
+    SPOTIFY_CLIENT_SECRET="your-client-secret"
     ```
 
     Replace `your-client-id` and `your-client-secret` with your Spotify application credentials.
+   
+    Replace `your-next-auth-secret` with a generated secret key. You can generate one using the following OpenSSL command:
+    ```bash
+    openssl rand -base64 32
+    ````
 
-4. Run the application:
+5. Run the application:
 
     ```bash
     npm run dev
     ```
 
-5. Open your browser and navigate to [http://localhost:3000](http://localhost:3000).
+6. Open your browser and navigate to [http://localhost:3000](http://localhost:3000).
 
 ## Contributing
 
