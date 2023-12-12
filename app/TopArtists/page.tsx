@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 function TopTracks() {
   const { data: session } = useSession();
   const [topArtists, setTopArtists] = useState([]);
+  const [timeRange, setTimeRange] = useState('short_term'); // short_term, medium_term, long_term
 
   useEffect(() => {
     const getTopArtists = async () => {
@@ -16,7 +17,7 @@ function TopTracks() {
       const token = session.accessToken; // Utilisez le token de la session
 
       try {
-        const response = await fetch('https://api.spotify.com/v1/me/top/artists?time_range=short_term', {
+        const response = await fetch(`https://api.spotify.com/v1/me/top/artists?time_range=${timeRange}&limit=30`, {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
@@ -28,7 +29,6 @@ function TopTracks() {
         }
 
         const data = await response.json();
-        console.log("Top Artists data:", data);
         setTopArtists(data.items); // Mettre à jour l'état avec les artistes top
       } catch (error) {
         console.error("Error fetching top artists:", error);
@@ -36,11 +36,24 @@ function TopTracks() {
     };
 
     getTopArtists();
-  }, [session]); // Déclenchez l'effet lors du changement de la session
+  }, [session, timeRange]);
 
   return (
-    <div className="mt-40">
-      <h1 className="text-center text-3xl font-medium p-4 mx-auto w-6/12">Top Artists (Last 4 weeks)</h1>
+    <>
+      <h1 className="text-center text-3xl font-medium p-4 mx-auto w-6/12 mt-40">Top Artists (Last 4 weeks)</h1>
+      <div className="">
+        <div className="flex justify-between text-center mb-4">
+          <button onClick={() => setTimeRange('short_term')} className="flex-grow rounded-lg p-2 border bg-white m-1">
+            Last 4 weeks
+          </button>
+          <button onClick={() => setTimeRange('medium_term')} className="flex-grow rounded-lg p-2 border bg-white m-1">
+            Last 6 months
+          </button>
+          <button onClick={() => setTimeRange('long_term')} className="flex-grow rounded-lg p-2 border bg-white m-1">
+            All time
+          </button>
+        </div> 
+        
 
       <div className="flex flex-wrap justify-center">
         {topArtists.map((artist, index) => (
@@ -53,8 +66,8 @@ function TopTracks() {
         ))}
       </div>
     </div>
+    </>
   );
-  
 }
 
 export default TopTracks;

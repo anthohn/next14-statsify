@@ -36,14 +36,14 @@ function TopTracks() {
     };
 
     getTopTracks();
-  }, [session, timeRange]); // Ajouter timeRange comme dépendance
+  }, [session, timeRange]);
 
   return (
     <>
       <h1 className="text-center text-3xl font-medium p-4 mx-auto w-6/12 mt-40 ">Top Tracks</h1>
 
       <div className="">  
-      <div className="flex justify-between text-center mb-4">
+        <div className="flex justify-between text-center mb-4">
           <button onClick={() => setTimeRange('short_term')} className="flex-grow rounded-lg p-2 border bg-white m-1">
             Last 4 weeks
           </button>
