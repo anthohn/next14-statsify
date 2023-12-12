@@ -39,7 +39,7 @@ Spotify Stats is a personalized statistics tracking web application that allows 
     Create a `.env` file in the root directory and add your Spotify API credentials:
 
     ```env
-    NEXTAUTH_URL=http://localhost:3000
+    NEXTAUTH_URL="http://localhost:3000"
     NEXTAUTH_SECRET="your-next-auth-secret"
 
     SPOTIFY_CLIENT_ID="your-client-id"
