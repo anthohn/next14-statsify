@@ -27,7 +27,9 @@ export default async function RootLayout({
 
         <SessionProvider session={session}>
             <NavMenu />
-            {children}
+            <main className='flex flex-col mx-auto max-w-6xl'>
+              {children}
+            </main>
         </SessionProvider>
       </body>
     </html>
