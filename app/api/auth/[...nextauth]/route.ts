@@ -1,15 +1,6 @@
-import nextAuth from "next-auth";
-import SpotifyProvider from 'next-auth/providers/spotify'
+import { authOptions } from "@/lib/auth.js";
+import NextAuth from "next-auth";
 
-export const authOptions = {
-    providers: [
-        SpotifyProvider({
-            clientId: process.env.SPOTIFY_CLIENT_ID ?? "",
-            clientSecret: process.env.SPOTIFY_CLIENT_SECRET ?? "",
-        }),
-    ],
-};
+const handler = NextAuth(authOptions as any);
 
-export const handler = nextAuth(authOptions);
-
-export { handler as GET, handler as POST};
+export { handler as GET, handler as POST };
