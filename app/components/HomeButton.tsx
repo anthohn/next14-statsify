@@ -2,9 +2,8 @@ import { signIn, useSession  } from "next-auth/react";
 import Link from "next/link";
 
 export default function HomeButton() {
-
     const { data: session } = useSession();
-    const linkClasses = "bg-green-600 text-white py-2 px-3 rounded-lg hover:bg-green-700 shadow-2xl";
+    const linkClasses = "hover:scale-105 transition bg-green-600 text-white py-2 px-3 rounded-lg hover:bg-green-700";
   
     if (!session) {
       return (
