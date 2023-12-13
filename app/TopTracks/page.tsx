@@ -3,11 +3,12 @@ import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import Image from 'next/image';
 
-// Définition des types pour les pistes et les artistes
+// types  artists
 interface Artist {
   name: string;
 }
 
+// types tracks
 interface Track {
   id: string;
   name: string;
@@ -22,8 +23,10 @@ function TopTracks() {
   const [topTracks, setTopTracks] = useState<Track[]>([]); // Utilisation du type Track ici
   const [timeRange, setTimeRange] = useState('short_term'); // short_term, medium_term, long_term
 
+  // Lorsque session ou timeRange change
   useEffect(() => {
     const getTopTracks = async () => {
+      // vérification si il y'a bien une session et un token de session
       if (!session || !session.accessToken) {
         console.log("L'utilisateur n'est pas connecté");
         return;
@@ -38,10 +41,6 @@ function TopTracks() {
             'Content-Type': 'application/json',
           },
         });
-
-        if (!response.ok) {
-          throw new Error(`API call failed with status ${response.status}`);
-        }
 
         const data = await response.json();
         setTopTracks(data.items);
@@ -73,7 +72,6 @@ function TopTracks() {
           <div key={track.id} className="flex bg-white/70 shadow-2xl hover:scale-105 transition w-full m-2 h-16 rounded-2xl space-x-4 items-center px-6"> 
               <p className="text-xl font-bold">{index + 1}.</p>
               <Image src={track.album.images[0]?.url} alt={track.name} className="rounded-xl" width={45} height={45}  />
-
               <p className="text-xl font-bold"> {track.name}</p>
               <p className="text-sm text-gray-600">by {track.artists.map((artist: Artist) => artist.name).join(', ')}</p>
           </div>

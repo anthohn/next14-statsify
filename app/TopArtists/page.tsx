@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import Image from 'next/image';
 
-// Définition du type pour un artiste
+// types artist
 interface Artist {
   id: string;
   name: string;
@@ -12,8 +12,8 @@ interface Artist {
 
 function TopTracks() {
   const { data: session } = useSession();
-  const [topArtists, setTopArtists] = useState<Artist[]>([]); // Utiliser le type Artist ici
-  const [timeRange, setTimeRange] = useState('short_term'); // short_term, medium_term, long_term
+  const [topArtists, setTopArtists] = useState<Artist[]>([]);
+  const [timeRange, setTimeRange] = useState('short_term');
 
   useEffect(() => {
     const getTopArtists = async () => {
@@ -31,10 +31,6 @@ function TopTracks() {
             'Content-Type': 'application/json',
           },
         });
-
-        if (!response.ok) {
-          throw new Error(`API call failed with status ${response.status}`);
-        }
 
         const data = await response.json();
         setTopArtists(data.items);
@@ -63,8 +59,8 @@ function TopTracks() {
 
       <div className="flex flex-wrap justify-center">
         {topArtists.map((artist: Artist) => (
-          <div key={artist.id} className="flex justify-center bg-white/70 shadow-2xl hover:scale-105 transition w-80 m-8 h-80 rounded-xl flex-col space-y-4 items-center"> 
-              <Image src={artist.images[0]?.url} alt={artist.name} width={224} height={224} className="rounded-xl" />
+          <div key={artist.id} className="flex justify-center bg-white/70 shadow-2xl hover:scale-105 transition w-auto p-10 m-6 h-96 rounded-xl flex-col space-y-4 items-center"> 
+              <Image src={artist.images[0]?.url} alt={artist.name} width={150} height={150} style={{ width: 'auto', height: 'auto'}} priority={true} className="rounded-xl" />
               <p className="text-xl font-bold">{artist.name}</p>
           </div>
         ))}
