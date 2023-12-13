@@ -33,7 +33,7 @@ function AuthButton() {
 
     const pathname = usePathname()
     return (
-      <nav className="md:fixed md:left-1/2 md:-translate-x-1/2 md:mx-auto md:rounded-2xl md:px-3 md:w-11/12 shadow-2xl md:my-4 bg-white max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+      <nav className="z-[999] md:fixed md:left-1/2 md:-translate-x-1/2 md:mx-auto md:rounded-2xl md:px-3 md:w-11/12 shadow-2xl md:my-4 bg-white max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <Link className={`link ${pathname === '/' ? '' : ''}`} href="/">
           <span className="self-center md:text-lg lg:text-2xl font-semibold whitespace-nowrap">Stats for spotify</span>
         </Link>

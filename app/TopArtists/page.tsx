@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import Image from 'next/image';
 
-
 // Définition du type pour un artiste
 interface Artist {
   id: string;

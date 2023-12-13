@@ -1,15 +1,30 @@
-'use client'
+'use client';
 import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
+import Image from 'next/image';
+
+// Définition des types pour les pistes et les artistes
+interface Artist {
+  name: string;
+}
+
+interface Track {
+  id: string;
+  name: string;
+  album: {
+    images: Array<{ url: string }>;
+  };
+  artists: Artist[];
+}
 
 function TopTracks() {
   const { data: session } = useSession();
-  const [topTracks, setTopTracks] = useState([]);
+  const [topTracks, setTopTracks] = useState<Track[]>([]); // Utilisation du type Track ici
   const [timeRange, setTimeRange] = useState('short_term'); // short_term, medium_term, long_term
 
   useEffect(() => {
     const getTopTracks = async () => {
-      if (!session) {
+      if (!session || !session.accessToken) {
         console.log("L'utilisateur n'est pas connecté");
         return;
       }
@@ -54,16 +69,18 @@ function TopTracks() {
       </div> 
 
       <div className="flex flex-col">
-        {topTracks.map((track, index) => (
-          <div key={track.id} className="flex bg-white shadow-2xl hover:scale-105 transition w-full m-2 h-16 rounded-2xl space-x-4 items-center px-6"> 
+        {topTracks.map((track: Track, index) => (
+          <div key={track.id} className="flex bg-white/70 shadow-2xl hover:scale-105 transition w-full m-2 h-16 rounded-2xl space-x-4 items-center px-6"> 
               <p className="text-xl font-bold">{index + 1}.</p>
-              <img src={track.album.images[0]?.url} alt={track.name} className="w-10 h-10 rounded-xl" />
+              <Image src={track.album.images[0]?.url} alt={track.name} className="rounded-xl" width={45} height={45}  />
+
               <p className="text-xl font-bold"> {track.name}</p>
-              <p className="text-sm text-gray-600">by {track.artists.map(artist => artist.name).join(', ')}</p>
+              <p className="text-sm text-gray-600">by {track.artists.map((artist: Artist) => artist.name).join(', ')}</p>
           </div>
         ))}
       </div>
     </>
   );
 }
+
 export default TopTracks;

@@ -10,7 +10,6 @@ export default function HomeSection() {
                 <h1 className="text-4xl font-medium text-center">Personal Spotify Statistics</h1>
                 <HomeButton />
             </div>
-
         </>
     )
 }
