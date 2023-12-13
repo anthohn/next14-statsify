@@ -40,32 +40,28 @@ function TopTracks() {
 
   return (
     <>
-      <h1 className="text-center text-3xl font-medium p-4 mx-auto w-6/12 mt-40 ">Top Tracks</h1>
+      <h1 className="text-center text-3xl font-medium p-4 mx-auto w-6/12 sm:mt-40">Top Tracks</h1>
+      <div className="flex justify-between text-center mb-4">
+        <button onClick={() => setTimeRange('short_term')} className="w-4/12 rounded-lg p-2 bg-white m-1">
+          Last 4 weeks
+        </button>
+        <button onClick={() => setTimeRange('medium_term')} className="w-4/12 rounded-lg p-2 bg-white m-1">
+          Last 6 months
+        </button>
+        <button onClick={() => setTimeRange('long_term')} className="w-4/12 rounded-lg p-2 bg-white m-1">
+          All time
+        </button>
+      </div> 
 
-      <div className="">  
-        <div className="flex justify-between text-center mb-4">
-          <button onClick={() => setTimeRange('short_term')} className="flex-grow rounded-lg p-2 border bg-white m-1">
-            Last 4 weeks
-          </button>
-          <button onClick={() => setTimeRange('medium_term')} className="flex-grow rounded-lg p-2 border bg-white m-1">
-            Last 6 months
-          </button>
-          <button onClick={() => setTimeRange('long_term')} className="flex-grow rounded-lg p-2 border bg-white m-1">
-            All time
-          </button>
-        </div> 
-
-        <div className="flex flex-wrap justify-center">
-          {topTracks.map((track, index) => (
-            <a key={track.id} className="flex justify-center"> 
-              <div className="shadow-2xl hover:scale-105 transition w-80 m-8 h-80 rounded-xl flex flex-col space-y-4 items-center justify-center">
-                <p className="text-xl font-bold">{index + 1}. {track.name}</p>
-                <img src={track.album.images[0]?.url} alt={track.name} className="w-56 h-56 rounded-xl" />
-                <p className="text-sm text-gray-600">by {track.artists.map(artist => artist.name).join(', ')}</p>
-              </div>
-            </a>
-          ))}
-        </div>
+      <div className="flex flex-col">
+        {topTracks.map((track, index) => (
+          <div key={track.id} className="flex bg-white shadow-2xl hover:scale-105 transition w-full m-2 h-16 rounded-2xl space-x-4 items-center px-6"> 
+              <p className="text-xl font-bold">{index + 1}.</p>
+              <img src={track.album.images[0]?.url} alt={track.name} className="w-10 h-10 rounded-xl" />
+              <p className="text-xl font-bold"> {track.name}</p>
+              <p className="text-sm text-gray-600">by {track.artists.map(artist => artist.name).join(', ')}</p>
+          </div>
+        ))}
       </div>
     </>
   );

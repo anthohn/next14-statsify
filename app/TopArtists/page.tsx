@@ -29,7 +29,7 @@ function TopTracks() {
         }
 
         const data = await response.json();
-        setTopArtists(data.items); // Mettre à jour l'état avec les artistes top
+        setTopArtists(data.items);
       } catch (error) {
         console.error("Error fetching top artists:", error);
       }
@@ -40,31 +40,27 @@ function TopTracks() {
 
   return (
     <>
-      <h1 className="text-center text-3xl font-medium p-4 mx-auto w-6/12 mt-40">Top Artists (Last 4 weeks)</h1>
-      <div className="">
-        <div className="flex justify-between text-center mb-4">
-          <button onClick={() => setTimeRange('short_term')} className="flex-grow rounded-lg p-2 border bg-white m-1">
-            Last 4 weeks
-          </button>
-          <button onClick={() => setTimeRange('medium_term')} className="flex-grow rounded-lg p-2 border bg-white m-1">
-            Last 6 months
-          </button>
-          <button onClick={() => setTimeRange('long_term')} className="flex-grow rounded-lg p-2 border bg-white m-1">
-            All time
-          </button>
-        </div> 
-        
+      <h1 className="text-center text-3xl font-medium p-4 mx-auto w-6/12 sm:mt-40">Top Artists (Last 4 weeks)</h1>
+      <div className="flex justify-between text-center mb-4">
+        <button onClick={() => setTimeRange('short_term')} className="w-4/12 rounded-lg p-2 bg-white m-1">
+          Last 4 weeks
+        </button>
+        <button onClick={() => setTimeRange('medium_term')} className="w-4/12 rounded-lg p-2 bg-white m-1">
+          Last 6 months
+        </button>
+        <button onClick={() => setTimeRange('long_term')} className="w-4/12 rounded-lg p-2 bg-white m-1">
+          All time
+        </button>
+      </div> 
+      
 
-      <div className="flex flex-wrap justify-center">
-        {topArtists.map((artist, index) => (
-          <a key={artist.id} className="flex justify-center"> 
-            <div className="shadow-2xl hover:scale-105 transition w-80 m-8 h-80 rounded-xl flex flex-col space-y-4 items-center justify-center">
-              <img src={artist.images[0]?.url} alt={artist.name} className="w-56 h-56 rounded-xl" />
-              <p className="text-xl font-bold">{index + 1}. {artist.name}</p>
-            </div>
-          </a>
-        ))}
-      </div>
+    <div className="flex flex-wrap justify-center">
+      {topArtists.map((artist, index) => (
+        <div key={artist.id} className="flex justify-center bg-white shadow-2xl hover:scale-105 transition w-80 m-8 h-80 rounded-xl flex-col space-y-4 items-center"> 
+            <img src={artist.images[0]?.url} alt={artist.name} className="w-56 h-56 rounded-xl" />
+            <p className="text-xl font-bold">{index + 1}. {artist.name}</p>
+        </div>
+      ))}
     </div>
     </>
   );
