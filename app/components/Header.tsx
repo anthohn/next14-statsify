@@ -33,7 +33,7 @@ function AuthButton() {
 
     const pathname = usePathname()
     return (
-      <nav className="z-[999] md:fixed md:left-1/2 md:-translate-x-1/2 md:mx-auto md:rounded-2xl md:px-3 md:w-11/12 shadow-2xl md:my-4 bg-white max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+      <nav className="z-[999] md:fixed md:left-1/2 md:-translate-x-1/2 md:mx-auto md:rounded-2xl lg:px-8 md:w-11/12 shadow-2xl md:my-4 bg-white max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <Link className={`link ${pathname === '/' ? '' : ''}`} href="/">
           <span className="self-center text-2xl md:text-xl lg:text-2xl font-semibold whitespace-nowrap">Stats for spotify</span>
         </Link>
@@ -43,16 +43,16 @@ function AuthButton() {
                 <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h15M1 7h15M1 13h15"/>
             </svg>
         </button>
-        <div className="hidden w-full items-center md:space-x-4 md:justify-center md:space-y-0 md:block md:w-auto" id="navbar-default">
-          <Link 
-            className={`link ${pathname === '/TopTracks' ? 'bg-green-600 text-white py-2 px-4 rounded-2xl' : linkclassNamees}`} 
-            href="/TopTracks">
-            Top Tracks
-          </Link>
+        <div className="hidden w-full items-center space-x-2 lg:space-x-4 md:justify-center md:space-y-0 md:block md:w-auto" id="navbar-default">
           <Link 
             className={`link ${pathname === '/TopArtists' ? 'bg-green-600 text-white py-2 px-4 rounded-2xl' : linkclassNamees}`} 
             href="/TopArtists">
             Top Artists
+          </Link>
+          <Link 
+            className={`link ${pathname === '/TopTracks' ? 'bg-green-600 text-white py-2 px-4 rounded-2xl' : linkclassNamees}`} 
+            href="/TopTracks">
+            Top Tracks
           </Link>
           <Link 
             className={`link ${pathname === '/RecentlyPlayed' ? 'bg-green-600 text-white py-2 px-4 rounded-2xl' : linkclassNamees}`} 

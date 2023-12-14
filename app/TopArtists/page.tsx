@@ -7,13 +7,26 @@ import Image from 'next/image';
 interface Artist {
   id: string;
   name: string;
+  external_urls: {
+    spotify: string; // URL de la piste sur Spotify
+  };
   images: Array<{ url: string }>;
 }
+
+// Définition du type pour timeRange
+type TimeRange = 'short_term' | 'medium_term' | 'long_term';
 
 function TopTracks() {
   const { data: session } = useSession();
   const [topArtists, setTopArtists] = useState<Artist[]>([]);
   const [timeRange, setTimeRange] = useState('short_term');
+
+ // Mapping des descriptions de timeRange
+ const timeRangeDescriptions: { [key in TimeRange]: string } = {
+  'short_term': 'last 4 weeks',
+  'medium_term': 'last 6 months',
+  'long_term': 'all time'
+};
 
   useEffect(() => {
     const getTopArtists = async () => {
@@ -44,7 +57,10 @@ function TopTracks() {
 
   return (
     <>
-      <h1 className="text-center text-3xl font-medium p-4 mx-auto w-6/12 sm:mt-40">Top Artists (Last 4 weeks)</h1>
+      <div className="text-center text-3xl font-medium p-4 mx-auto w-8/12 md:mt-40 ">
+        <p>Top Artists </p>
+        <p>({timeRangeDescriptions[timeRange as TimeRange]})</p>
+      </div>
       <div className="flex justify-between text-center mb-4">
         <button onClick={() => setTimeRange('short_term')} className="w-4/12 rounded-lg p-2 bg-white m-1">
           Last 4 weeks
@@ -59,10 +75,10 @@ function TopTracks() {
 
       <div className="flex flex-wrap justify-center">
         {topArtists.map((artist: Artist) => (
-          <div key={artist.id} className="flex justify-center bg-white/70 shadow-2xl hover:scale-105 transition w-auto p-10 m-6 h-96 rounded-xl flex-col space-y-4 items-center"> 
+          <a href={artist.external_urls.spotify} key={artist.id} className="flex justify-center bg-white/70 shadow-2xl hover:scale-105 transition w-72 p-8 mx-6 mb-6 h-80 rounded-xl flex-col space-y-4 items-center"> 
               <Image src={artist.images[0]?.url} alt={artist.name} width={150} height={150} style={{ width: 'auto', height: 'auto'}} priority={true} className="rounded-xl" />
-              <p className="text-xl font-bold">{artist.name}</p>
-          </div>
+              <p className="text-xl font-bold line-clamp-1">{artist.name}</p>
+          </a>
         ))}
       </div>
     </>
