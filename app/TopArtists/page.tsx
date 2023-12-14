@@ -17,7 +17,7 @@ interface Artist {
 type TimeRange = 'short_term' | 'medium_term' | 'long_term';
 
 function TopTracks() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const [topArtists, setTopArtists] = useState<Artist[]>([]);
   const [timeRange, setTimeRange] = useState('short_term');
 
@@ -30,6 +30,7 @@ function TopTracks() {
 
   useEffect(() => {
     const getTopArtists = async () => {
+ 
       if (!session || !session.accessToken) {
         console.log("L'utilisateur n'est pas connecté");
         return;
@@ -53,7 +54,7 @@ function TopTracks() {
     };
 
     getTopArtists();
-  }, [session, timeRange]);
+  }, [session, timeRange, status]);
 
   return (
     <>
@@ -75,10 +76,9 @@ function TopTracks() {
 
       <div className="flex flex-wrap justify-center">
         {topArtists.map((artist: Artist, index) => (
-          <a href={artist.external_urls.spotify} key={artist.id} className="flex justify-center bg-white/70 shadow-2xl hover:scale-105 transition w-72 mx-6 mb-6 h-72 rounded-xl flex-col space-y-4 items-center"> 
-              {/* <p className="text-xl font-bold"></p> */}
-              <Image src={artist.images[0]?.url} alt={artist.name} width={150} height={150} style={{ width: 'auto', height: 'auto'}} priority={true} className="rounded-xl" />
-              <p className="text-xl font-bold line-clamp-1">{index + 1}. {artist.name}</p>
+          <a href={artist.external_urls.spotify} key={artist.id} className="flex justify-center bg-white/70 shadow-2xl hover:scale-105 transition w-1/4 mx-6 mb-6 h-52 rounded-xl flex-col space-y-4 items-center"> 
+              <Image src={artist.images[0]?.url} alt={artist.name} width={100} height={100} style={{ width: 'auto', height: 'auto'}} className="rounded-xl" />
+              <p className="text-base font-bold line-clamp-1 mx-2">{index + 1}. {artist.name}</p>
           </a>
         ))}
       </div>
