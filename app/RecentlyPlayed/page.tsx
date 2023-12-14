@@ -64,9 +64,9 @@ function RecentlyPlayedTracks() {
       {recentTracks.map(({ track, played_at }) => (
         <a href={track.external_urls.spotify} target="_blank" rel="noopener noreferrer" key={`${track.id}-${played_at}`} className="flex justify-between bg-white/70 shadow-2xl hover:scale-105 transition w-full mb-4 h-16 rounded-2xl items-center sm:px-4 px-2 space-x-2 sm:space-x-12"> 
           <Image src={track.album.images[0]?.url} alt={track.name} className="rounded-xl" width={45} height={45}  />
-          <p className="w-1/2 sm:text-xl font-bold line-clamp-1"> {track.name}</p>
-          <p className="w-1/2 text-sm text-gray-600 line-clamp-1"> {track.artists.map((artist: Artist) => artist.name).join(', ')}</p>
-          <p className="text-sm text-gray-600">{formatDistanceToNow(new Date(played_at))} ago</p>
+          <p className="w-5/12 sm:text-xl font-bold line-clamp-1"> {track.name}</p>
+          <p className="w-4/12 text-sm text-gray-600 line-clamp-1"> {track.artists.map((artist: Artist) => artist.name).join(', ')}</p>
+          <p className="w-3/12  text-gray-600 text-xs">{formatDistanceToNow(new Date(played_at))} ago</p>
         </a>
       ))}
     </div>

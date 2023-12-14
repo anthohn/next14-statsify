@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function HomeButton() {
     const { data: session } = useSession();
-    const linkClasses = "hover:scale-105 transition bg-green-600 text-white text-xl font-semibold py-6 px-8 rounded-2xl hover:bg-green-700 shadow-2xl";
+    const linkClasses = "w-1/3 hover:scale-105 transition bg-green-600 text-white text-sm font-semibold py-4 rounded-2xl hover:bg-green-700 shadow-2xl";
   
     if (!session) {
       return (
@@ -16,13 +16,14 @@ export default function HomeButton() {
     return (
       <>
         <div className="flex space-x-1">
-          <p className="mt-6 text-xl">Hi </p>
-          <p className="mt-6 text-xl font-bold">{session.user?.name} 👋</p>
+          <p className="text-xl">Hi </p>
+          <p className="text-xl font-bold">{session.user?.name} 👋</p>
         </div>
-        <p className="mt-16 text-xl ">Choose what you want to see :</p>
-        <div className="flex space-x-8 mt-4">
-          <Link className={linkClasses} href="/TopTracks">Top Tracks 🎵</Link>
+        <p className="mt-2 text-lg ">Choose what you want to see :</p>
+        <div className="flex w-8/12 space-x-4 m-4 text-center">
           <Link className={linkClasses} href="/TopArtists">Top Artists 👨‍🎤</Link>
+          <Link className={linkClasses} href="/TopTracks">Top Tracks 🎵</Link>
+          <Link className={linkClasses} href="/RecentlyPlayed">Recently Played 🕐</Link>
         </div>
       </>
     )
