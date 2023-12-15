@@ -2,22 +2,13 @@
 import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import Image from 'next/image';
-
-// types artist
-interface Artist {
-  id: string;
-  name: string;
-  external_urls: {
-    spotify: string; // URL de la piste sur Spotify
-  };
-  images: Array<{ url: string }>;
-}
+import { Artist } from '@/types';
 
 // Définition du type pour timeRange
 type TimeRange = 'short_term' | 'medium_term' | 'long_term';
 
-function TopTracks() {
-  const { data: session, status } = useSession();
+const TopArtists: React.FC = () => {
+  const { data: session } = useSession();
   const [topArtists, setTopArtists] = useState<Artist[]>([]);
   const [timeRange, setTimeRange] = useState('short_term');
 
@@ -28,14 +19,12 @@ function TopTracks() {
   'long_term': 'all time'
 };
 
-  useEffect(() => {
+  useEffect(() => {    
     const getTopArtists = async () => {
- 
       if (!session || !session.accessToken) {
         console.log("L'utilisateur n'est pas connecté");
         return;
       }
-
       const token = session.accessToken;
 
       try {
@@ -54,7 +43,7 @@ function TopTracks() {
     };
 
     getTopArtists();
-  }, [session, timeRange, status]);
+  }, [session, timeRange]);
 
   return (
     <>
@@ -75,7 +64,7 @@ function TopTracks() {
       </div> 
 
       <div className="flex flex-wrap justify-center">
-        {topArtists.map((artist: Artist, index) => (
+        {topArtists.map((artist, index) => (
           <a href={artist.external_urls.spotify} key={artist.id} className="flex justify-center bg-white/70 shadow-2xl hover:scale-105 transition w-1/4 mx-6 mb-6 h-52 rounded-xl flex-col space-y-4 items-center"> 
               <Image src={artist.images[0]?.url} alt={artist.name} width={100} height={100} style={{ width: 'auto', height: 'auto'}} className="rounded-xl" />
               <p className="text-base font-bold line-clamp-1 mx-2">{index + 1}. {artist.name}</p>
@@ -85,5 +74,4 @@ function TopTracks() {
     </>
   );
 }
-
-export default TopTracks;
+export default TopArtists;

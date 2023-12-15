@@ -2,40 +2,22 @@
 import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import Image from 'next/image';
-
-// types  artists
-interface Artist {
-  name: string;
-}
-
-// types tracks
-interface Track {
-  id: string;
-  name: string;
-  external_urls: {
-    spotify: string; // URL de la piste sur Spotify
-  };
-  album: {
-    images: Array<{ url: string }>;
-  };
-  artists: Artist[];
-}
+import { TopTrack } from '@/types'; // Import du type Artist depuis '@/types'
 
 // Définition du type pour timeRange
 type TimeRange = 'short_term' | 'medium_term' | 'long_term';
 
-
-function TopTracks() {
+const TopTracks: React.FC = () => {
   const { data: session } = useSession();
-  const [topTracks, setTopTracks] = useState<Track[]>([]); // Utilisation du type Track ici
+  const [topTracks, setTopTracks] = useState<TopTrack[]>([]); // Utilisation du type Track ici
   const [timeRange, setTimeRange] = useState('short_term'); // short_term, medium_term, long_term
 
- // Mapping des descriptions de timeRange
- const timeRangeDescriptions: { [key in TimeRange]: string } = {
-  'short_term': 'last 4 weeks',
-  'medium_term': 'last 6 months',
-  'long_term': 'all time'
-};
+  // Mapping des descriptions de timeRange
+  const timeRangeDescriptions: { [key in TimeRange]: string } = {
+    'short_term': 'last 4 weeks',
+    'medium_term': 'last 6 months',
+    'long_term': 'all time'
+  };
 
   // Lorsque session ou timeRange change
   useEffect(() => {
@@ -45,7 +27,6 @@ function TopTracks() {
         console.log("L'utilisateur n'est pas connecté");
         return;
       }
-
       const token = session.accessToken;
 
       try {
@@ -85,17 +66,16 @@ function TopTracks() {
       </div> 
 
       <div className="flex flex-col">
-        {topTracks.map((track: Track, index) => (
-          <a href={track.external_urls.spotify} key={track.id} className="flex bg-white/70 shadow-2xl hover:scale-105 transition w-full mb-4 h-16 rounded-2xl space-x-4 items-center px-6"> 
-              <p className="text-xl font-bold">{index + 1}.</p>
-              <Image src={track.album.images[0]?.url} alt={track.name} className="rounded-xl" width={45} height={45}  />
-              <p className="text-xl font-bold line-clamp-1"> {track.name}</p>
-              <p className="text-sm text-gray-600">by {track.artists.map((artist: Artist) => artist.name).join(', ')}</p>
-          </a>
-        ))}
+      {topTracks.map((TopTrack, index) => (
+        <a href={TopTrack.external_urls.spotify} key={TopTrack.id} className="flex bg-white/70 shadow-2xl hover:scale-105 transition w-full mb-4 h-16 rounded-2xl space-x-4 items-center px-6"> 
+            <p className="text-xl font-bold">{index + 1}.</p>
+            <Image src={TopTrack.album.images[0]?.url} alt={TopTrack.name} className="rounded-xl" width={45} height={45}  />
+            <p className="text-xl font-bold line-clamp-1"> {TopTrack.name}</p>
+            <p className="text-sm text-gray-600">by {TopTrack.artists.map((artist) => artist.name).join(', ')}</p>
+        </a>
+      ))}
       </div>
     </>
   );
 }
-
 export default TopTracks;
