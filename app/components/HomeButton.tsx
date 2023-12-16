@@ -21,10 +21,10 @@ export default function HomeButton() {
           <p className="text-xl font-bold">{session.user?.name} 👋</p>
         </div>
         <p className="mt-2 text-lg ">Choose what you want to see :</p>
-        <div className="flex w-8/12 space-x-4 m-4 text-center">
+        <div className="flex w-10/12 space-x-4 m-4 text-center">
           <Link className={linkClasses} href="/TopArtists">Top Artists 👨‍🎤</Link>
           <Link className={linkClasses} href="/TopTracks">Top Tracks 🎵</Link>
-          <Link className={linkClasses} href="/RecentlyPlayed">Recently Played 🕐</Link>
+          <Link className={linkClasses} href="/RecentlyPlayed">Recent 🕐</Link>
         </div>
       </>
     )

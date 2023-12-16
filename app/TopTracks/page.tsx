@@ -14,7 +14,7 @@ export default async function TopTracksPage() {
   return (
     <>
       <title>Top Tracks - Statsify</title>
-      <h1 className="text-center text-3xl font-medium p-4 mx-auto w-6/12 sm:mt-40">Top Tracks (last 4 weeks)</h1>
+      <h1 className="text-center text-4xl font-semibold p-4 mx-auto mt-12 sm:mt-40">Top Tracks (last 4 weeks)</h1>
       <div className="flex flex-col md:mt-40">
         {topTracks.map((topTrack, index) => (
           <a href={topTrack.external_urls.spotify} target="_blank" key={topTrack.id} className="flex bg-white/70 shadow-2xl hover:scale-105 transition w-full mb-4 h-16 rounded-2xl space-x-4 items-center px-6"> 
