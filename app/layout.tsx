@@ -8,7 +8,7 @@ import Header from './components/Header';
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Spotify stats',
+  title: 'View your personnal stats - Statsify',
   description: 'Spotify personnal statistics',
 }
 

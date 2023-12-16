@@ -6,7 +6,8 @@ export default async function TopArtistsPage() {
   const topArtists = await getTopArtists(timeRange);
 
   return (
-  <> 
+  <>
+    <title>Top Artists - Statsify</title>
     <h1 className="text-center text-3xl font-medium p-4 mx-auto w-6/12 sm:mt-40">Top Artists (last 4 weeks)</h1>
     <div className="flex flex-wrap justify-center md:mt-40">
       {topArtists.map((topArtist, index) => (

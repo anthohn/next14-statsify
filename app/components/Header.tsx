@@ -35,7 +35,7 @@ function AuthButton() {
     return (
       <nav className="z-[999] md:fixed md:left-1/2 md:-translate-x-1/2 md:mx-auto md:rounded-2xl lg:px-8 md:w-11/12 shadow-2xl md:my-4 bg-white max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <Link className={`link ${pathname === '/' ? '' : ''}`} href="/">
-          <span className="self-center text-2xl md:text-xl lg:text-2xl font-semibold whitespace-nowrap">Stats for spotify</span>
+          <span className="self-center text-2xl md:text-xl lg:text-2xl font-semibold whitespace-nowrap">Statsify</span>
         </Link>
         <button data-collapse-toggle="navbar-default" type="button" className="inline-flex items-center p-2 w-10 h-10 justify-center text-md text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200" aria-controls="navbar-default" aria-expanded="false">
             <span className="sr-only">Open main menu</span>

@@ -8,6 +8,7 @@ export default async function RecentlyPlayedTracksPage() {
 
   return (
     <>
+    <title>Recently Played - Statsify</title>
     <h1 className="text-center text-3xl font-medium p-4 mx-auto w-6/12 sm:mt-40">Recently Played Tracks</h1>
     <div className="flex flex-col">
       {recentlyPlayedTracks.map((recentlyPlayedTrack, played_at ) => (
