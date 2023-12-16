@@ -6,6 +6,9 @@ This project was created to apply my Next.js and NextAuth.js knowledge by creati
 
 Spotify Stats is a personalized statistics tracking web application that allows users to connect their Spotify account and visualize their music listening habits. With this application, users can view their top artists, top tracks, favorite genres, and recently played songs.
 
+![image](https://github.com/anthohn/next14-statsify/assets/75019251/0c08c31d-92ed-4e2f-af9c-b4c1347d126e)
+
+
 ## Planned Features
 
 - **Spotify Authentication**: Users can log in with their Spotify accounts using the Spotify API.
@@ -18,6 +21,16 @@ Spotify Stats is a personalized statistics tracking web application that allows 
 - [Next.js](https://nextjs.org/) - React framework for server-rendered React applications.
 - [NextAuth.js](https://next-auth.js.org/) - Authentication library for Next.js.
 - [Spotify API](https://developer.spotify.com/documentation/web-api/) - Access Spotify user data.
+
+## Technologies Version
+
+| Technologie | Version        |
+|-------------|----------------|
+| Next.js     | 14.0.4         |
+| NextAuth.js | 4.24.5         |
+| TailwindCSS | 3.3.0          |
+| npm         | 10.2.4         |
+
 
 ## Development Environment
 
