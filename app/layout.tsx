@@ -5,6 +5,7 @@ import { getServerSession } from 'next-auth';
 import SessionProvider  from './components/SessionProvider';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -31,6 +32,7 @@ export default async function RootLayout({
               {children}
             </main>
             <Footer />
+            <SpeedInsights />
         </SessionProvider>
       </body>
     </html>
