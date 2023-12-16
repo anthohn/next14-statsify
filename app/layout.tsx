@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google'
 import { getServerSession } from 'next-auth';
 import SessionProvider  from './components/SessionProvider';
 import Header from './components/Header';
+import Footer from './components/Footer';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -29,6 +30,7 @@ export default async function RootLayout({
             <main className='flex flex-col space-y-20 mx-auto max-w-4xl'>
               {children}
             </main>
+            <Footer />
         </SessionProvider>
       </body>
     </html>
