@@ -1,9 +1,15 @@
 import getTopArtists from "@/actions/getTopArtists";
 import Image from "next/image";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 
 export default async function TopArtistsPage() {
-  const timeRange = 'medium_term';
-  const topArtists = await getTopArtists(timeRange);
+  const session = await getServerSession();
+  if (!session || !session.user) {
+    redirect('/api/auth/signin')    
+  }
+
+  const topArtists = await getTopArtists();
 
   return (
   <>

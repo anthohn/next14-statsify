@@ -2,8 +2,16 @@ import getRecentlyPlayedTracks from "@/actions/getRecentlyPlayedTracks";
 import Image from 'next/image';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import { Artist } from '@/types';
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 
 export default async function RecentlyPlayedTracksPage() {
+
+  const session = await getServerSession();
+  if (!session || !session.user) {
+    redirect('/api/auth/signin')    
+  }
+
   const recentlyPlayedTracks = await getRecentlyPlayedTracks();
 
   return (

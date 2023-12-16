@@ -1,7 +1,14 @@
 import getTopTracks from "@/actions/getTopTracks";
 import Image from 'next/image';
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 
 export default async function TopTracksPage() {
+  const session = await getServerSession();
+  if (!session || !session.user) {
+    redirect('/api/auth/signin')    
+  }
+
   const topTracks = await getTopTracks();
 
   return (

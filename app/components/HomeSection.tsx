@@ -8,6 +8,9 @@ export default async function HomeSection() {
               <h1 className="text-3xl m-6 font-medium text-center">Personal Spotify Statistics</h1>
               <HomeButton />
           </div>
+          <div>
+            <h1>test</h1>
+          </div>
       </>
   )
 }
