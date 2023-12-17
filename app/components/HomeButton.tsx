@@ -22,9 +22,9 @@ export default function HomeButton() {
         </div>
         <p className="mt-2 text-lg ">Choose what you want to see :</p>
         <div className="flex w-10/12 space-x-4 m-4 text-center">
-          <Link className={linkClasses} href="/TopArtists">Top Artists 👨‍🎤</Link>
-          <Link className={linkClasses} href="/TopTracks">Top Tracks 🎵</Link>
-          <Link className={linkClasses} href="/RecentlyPlayed">Recent 🕐</Link>
+          <Link className={linkClasses} href="/top-artists/short_term">Top Artists 👨‍🎤</Link>
+          <Link className={linkClasses} href="/top-tracks/short_term">Top Tracks 🎵</Link>
+          <Link className={linkClasses} href="/recently-played">Recent 🕐</Link>
         </div>
       </>
     )

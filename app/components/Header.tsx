@@ -51,18 +51,18 @@ export default function Header() {
         <div className="hidden w-full md:block md:w-auto" id="navbar-default">
           <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
             <Link 
-              className={`link ${pathname === '/TopArtists' ? 'bg-green-600 text-white py-2 px-4 rounded-2xl' : linkclassNamees}`} 
-              href="/TopArtists">
+              className={`link ${pathname.startsWith('/top-artists/') ? 'bg-green-600 text-white py-2 px-4 rounded-2xl' : linkclassNamees}`} 
+              href="/top-artists/short_term">
               Top Artists
             </Link>
             <Link 
-              className={`link ${pathname === '/TopTracks' ? 'bg-green-600 text-white py-2 px-4 rounded-2xl' : linkclassNamees}`} 
-              href="/TopTracks">
+              className={`link ${pathname.startsWith('/top-tracks/') ? 'bg-green-600 text-white py-2 px-4 rounded-2xl' : linkclassNamees}`} 
+              href="/top-tracks/short_term">
               Top Tracks
             </Link>
             <Link 
-              className={`link ${pathname === '/RecentlyPlayed' ? 'bg-green-600 text-white py-2 px-4 rounded-2xl' : linkclassNamees}`} 
-              href="/RecentlyPlayed">
+              className={`link ${pathname === '/recently-played' ? 'bg-green-600 text-white py-2 px-4 rounded-2xl' : linkclassNamees}`} 
+              href="/recently-played">
               Recently Played
             </Link>
             <AuthButton />
