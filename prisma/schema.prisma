@@ -1,0 +1,34 @@
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id     String      @unique
+  name   String      @db.Text
+  tracks UserTrack[]
+}
+
+model Track {
+  id    String      @id
+  users UserTrack[]
+}
+
+model UserTrack {
+  userId      String
+  trackId     String
+  ranking     Int
+  rankingType String
+  date        DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id])
+  track       Track    @relation(fields: [trackId], references: [id])
+
+  @@id([userId, trackId, date])
+  @@index([trackId], name: "idx_track")
+  @@index([userId], name: "idx_user")
+}
