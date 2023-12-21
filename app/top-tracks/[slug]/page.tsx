@@ -1,5 +1,4 @@
 import getTopTracks from "@/actions/getTopTracks";
-import Image from 'next/image';
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import Link from 'next/link';
@@ -17,6 +16,8 @@ export default async function TopTracksPage({params} : {params : { slug: string 
   const timeRange = params.slug
   const topTracks = await getTopTracks(timeRange);
 
+
+
   const timeRangeDescriptions = {
     'short_term': 'last 4 weeks',
     'medium_term': 'last 6 months',
@@ -27,14 +28,14 @@ export default async function TopTracksPage({params} : {params : { slug: string 
   const name = session.user.name
   const userId = session.user.id
 
-  // Vérifiez d'abord si l'utilisateur existe déjà dans la base de données
+  // Vérifie d'abord si l'utilisateur existe déjà dans la bdd
   const existingUser = await prisma.user.findUnique({
     where: {
       id: userId,
     },
   });
 
-  // Si l'utilisateur n'existe pas, créez-le
+  // Si l'utilisateur n'existe pas, créer
   if (!existingUser) {
     await prisma.user.create({
       data: {
@@ -42,15 +43,15 @@ export default async function TopTracksPage({params} : {params : { slug: string 
         name: name,
       },
     });
-}
+  }
   const today = new Date();
-  today.setHours(0, 0, 0, 0); // Définir l'heure au début de la journée
+  today.setHours(0, 0, 0, 0); // l'heure au début de la journée
 
   topTracks.map(async (topTrack, index) => {
   // L'index commence à 0, donc ajoutez 1 pour commencer le classement à 1
     const ranking = index + 1;
 
-    // Vérifiez d'abord si la piste existe déjà pour éviter les doublons
+    // Vérifie d'abord si la piste existe déjà pour éviter les doublons
     let track = await prisma.track.findUnique({
       where: { id: topTrack.id },
     });
@@ -59,31 +60,30 @@ export default async function TopTracksPage({params} : {params : { slug: string 
       track = await prisma.track.create({
         data: {
           id: topTrack.id,
-          // Autres champs nécessaires pour une piste
         },
       });
     }
   
-    // Vérifier si un enregistrement existe déjà pour aujourd'hui
+    // Vérifie si un enregistrement existe déjà pour aujourd'hui
     const existingUserTrack = await prisma.userTrack.findFirst({
       where: {
-        userId: userId, // Vérifiez l'utilisateur
+        userId: userId, 
         AND: [
-          { trackId: topTrack.id }, // Vérifiez le trackId spécifique
-          { rankingType: timeRange } // Vérifiez le timeRange spécifique
+          { trackId: topTrack.id },
+          { rankingType: timeRange }
         ]
       },
     });
 
   if (!existingUserTrack) {
-    // Créez une relation utilisateur-piste dans la table userTrack
+    // relation utilisateur-piste dans la table userTrack
     const userTrack = await prisma.userTrack.create({
       data: {
         userId: userId,
         trackId: topTrack.id,
         ranking: ranking,
-        rankingType: timeRange, // Utilisez une valeur appropriée
-        date: new Date(), // La date actuelle
+        rankingType: timeRange,
+        date: new Date(),
       },
     });
 
@@ -92,6 +92,29 @@ export default async function TopTracksPage({params} : {params : { slug: string 
     return { track, userTrack: existingUserTrack };
   }
 });
+
+  // Récupérer les données de classement pour chaque musique
+  const rankingData = await Promise.all(topTracks.map(async (track) => {
+    const rankings = await prisma.userTrack.findMany({
+      where: {
+        trackId: track.id,
+      },
+      orderBy: {
+        date: 'asc',
+      },
+    });
+
+    const history = rankings.map(r => ({
+      date: r.date,
+      rank: r.ranking
+    }));
+
+
+    return {
+      trackId: track.id,
+      history: history,
+    };
+  }));
 
   return (
     <>
@@ -103,7 +126,7 @@ export default async function TopTracksPage({params} : {params : { slug: string 
         <Link className="w-4/12 rounded-lg p-2 bg-white m-1" href="/top-tracks/long_term">All time</Link>
       </div>
 
-      <Tracks topTracks={topTracks} />
+      <Tracks topTracks={topTracks} rankingData={rankingData} />
     </>
   );
 }

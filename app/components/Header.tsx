@@ -34,7 +34,7 @@ export default function Header() {
 
   const pathname = usePathname()
   return (
-    <nav className="z-[999] md:fixed bg-white md:left-1/2 md:-translate-x-1/2 md:mx-auto md:rounded-2xl shadow-2xl md:w-11/12 max-w-screen-xl md:my-4 mx-auto sm:px-6">
+    <nav className="z-[99] md:fixed bg-white md:left-1/2 md:-translate-x-1/2 md:mx-auto md:rounded-2xl shadow-2xl md:w-11/12 max-w-screen-xl md:my-4 mx-auto sm:px-6">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <Link 
           className="flex items-center space-x-3 rtl:space-x-reverse"

@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth.js";
 import { TopTrack } from "@/types";
 
-const getTopTracks = async (timeRange: string = 'short_term', trackLimit: string = '30'): Promise<TopTrack[]> => {
+const getTopTracks = async (timeRange: string = 'short_term', trackLimit: string = '50'): Promise<TopTrack[]> => {
     
   const userSession  = await getServerSession(authOptions);
   const token = userSession .accessToken
