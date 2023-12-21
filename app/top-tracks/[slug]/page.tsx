@@ -3,10 +3,14 @@ import Image from 'next/image';
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import Link from 'next/link';
+import { TopTrack } from '@/types'
+import { PrismaClient } from "@prisma/client";
+import { authOptions } from "@/lib/auth.js";
+
 
 export default async function TopTracksPage({params} : {params : { slug: string }}) {
 
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
   if (!session || !session.user) {
     redirect('/api/auth/signin')    
   }
@@ -19,6 +23,81 @@ export default async function TopTracksPage({params} : {params : { slug: string 
     'medium_term': 'last 6 months',
     'long_term': 'all time'
   };
+  
+  console.log(timeRange)
+  const prisma = new PrismaClient();
+
+  const name = session.user.name
+  const userId = session.user.id
+
+  // Vérifiez d'abord si l'utilisateur existe déjà dans la base de données
+  const existingUser = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+  });
+
+  // Si l'utilisateur n'existe pas, créez-le
+  if (!existingUser) {
+    await prisma.user.create({
+      data: {
+        id: userId,
+        name: name,
+      },
+    });
+}
+
+  topTracks.map(async topTrack => {
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Définir l'heure au début de la journée
+
+    // Vérifiez d'abord si la piste existe déjà pour éviter les doublons
+    let track = await prisma.track.findUnique({
+      where: { id: topTrack.id },
+    });
+  
+    if (!track) {
+      track = await prisma.track.create({
+        data: {
+          id: topTrack.id,
+          // Autres champs nécessaires pour une piste
+        },
+      });
+    }
+  
+    // Vérifier si un enregistrement existe déjà pour aujourd'hui
+    const existingUserTrack = await prisma.userTrack.findFirst({
+      where: {
+        userId: userId, // Check for the specific user
+        trackId: topTrack.id, // Check for the specific track
+        date: {
+          gte: today, // The date should be greater than or equal to the start of today
+          lt: new Date(today.getTime() + 24 * 60 * 60 * 1000), // But less than tomorrow (today + 1 day)
+        },
+      },
+    });
+
+  if (!existingUserTrack) {
+    // Créez une relation utilisateur-piste dans la table userTrack
+    const userTrack = await prisma.userTrack.create({
+      data: {
+        userId: userId,
+        trackId: topTrack.id,
+        ranking: 2,
+        rankingType: 'FOUR_WEEKS', // Utilisez une valeur appropriée
+        date: new Date(), // La date actuelle
+      },
+    });
+
+    return { track, userTrack };
+  } else {
+    return { track, userTrack: existingUserTrack };
+  }
+});
+
+
+
 
   return (
     <>
