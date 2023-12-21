@@ -46,11 +46,11 @@ export default async function TopTracksPage({params} : {params : { slug: string 
       },
     });
 }
+const today = new Date();
+today.setHours(0, 0, 0, 0); // Définir l'heure au début de la journée
 
   topTracks.map(async topTrack => {
 
-    const today = new Date();
-    today.setHours(0, 0, 0, 0); // Définir l'heure au début de la journée
 
     // Vérifiez d'abord si la piste existe déjà pour éviter les doublons
     let track = await prisma.track.findUnique({
@@ -69,12 +69,11 @@ export default async function TopTracksPage({params} : {params : { slug: string 
     // Vérifier si un enregistrement existe déjà pour aujourd'hui
     const existingUserTrack = await prisma.userTrack.findFirst({
       where: {
-        userId: userId, // Check for the specific user
-        trackId: topTrack.id, // Check for the specific track
-        date: {
-          gte: today, // The date should be greater than or equal to the start of today
-          lt: new Date(today.getTime() + 24 * 60 * 60 * 1000), // But less than tomorrow (today + 1 day)
-        },
+        userId: userId, // Vérifiez l'utilisateur
+        AND: [
+          { trackId: topTrack.id }, // Vérifiez le trackId spécifique
+          { rankingType: timeRange } // Vérifiez le timeRange spécifique
+        ]
       },
     });
 
@@ -85,7 +84,7 @@ export default async function TopTracksPage({params} : {params : { slug: string 
         userId: userId,
         trackId: topTrack.id,
         ranking: 2,
-        rankingType: 'FOUR_WEEKS', // Utilisez une valeur appropriée
+        rankingType: timeRange, // Utilisez une valeur appropriée
         date: new Date(), // La date actuelle
       },
     });
@@ -95,9 +94,6 @@ export default async function TopTracksPage({params} : {params : { slug: string 
     return { track, userTrack: existingUserTrack };
   }
 });
-
-
-
 
   return (
     <>
