@@ -16,8 +16,6 @@ export default async function TopTracksPage({params} : {params : { slug: string 
   const timeRange = params.slug
   const topTracks = await getTopTracks(timeRange);
 
-
-
   const timeRangeDescriptions = {
     'short_term': 'last 4 weeks',
     'medium_term': 'last 6 months',
@@ -93,11 +91,12 @@ export default async function TopTracksPage({params} : {params : { slug: string 
   }
 });
 
-  // Récupérer les données de classement pour chaque musique
+  // Récupére les données de classement pour chaque musique
   const rankingData = await Promise.all(topTracks.map(async (track) => {
     const rankings = await prisma.userTrack.findMany({
       where: {
         trackId: track.id,
+        rankingType: timeRange, // Filter by the current time range
       },
       orderBy: {
         date: 'asc',
@@ -108,7 +107,6 @@ export default async function TopTracksPage({params} : {params : { slug: string 
       date: r.date,
       rank: r.ranking
     }));
-
 
     return {
       trackId: track.id,
@@ -125,7 +123,6 @@ export default async function TopTracksPage({params} : {params : { slug: string 
         <Link className="w-4/12 rounded-lg p-2 bg-white m-1" href="/top-tracks/medium_term">Last 6 months</Link>
         <Link className="w-4/12 rounded-lg p-2 bg-white m-1" href="/top-tracks/long_term">All time</Link>
       </div>
-
       <Tracks topTracks={topTracks} rankingData={rankingData} />
     </>
   );
