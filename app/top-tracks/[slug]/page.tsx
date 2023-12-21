@@ -24,7 +24,6 @@ export default async function TopTracksPage({params} : {params : { slug: string 
     'long_term': 'all time'
   };
   
-  console.log(timeRange)
   const prisma = new PrismaClient();
 
   const name = session.user.name
@@ -46,11 +45,12 @@ export default async function TopTracksPage({params} : {params : { slug: string 
       },
     });
 }
-const today = new Date();
-today.setHours(0, 0, 0, 0); // Définir l'heure au début de la journée
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // Définir l'heure au début de la journée
 
-  topTracks.map(async topTrack => {
-
+  topTracks.map(async (topTrack, index) => {
+  // L'index commence à 0, donc ajoutez 1 pour commencer le classement à 1
+    const ranking = index + 1;
 
     // Vérifiez d'abord si la piste existe déjà pour éviter les doublons
     let track = await prisma.track.findUnique({
@@ -83,7 +83,7 @@ today.setHours(0, 0, 0, 0); // Définir l'heure au début de la journée
       data: {
         userId: userId,
         trackId: topTrack.id,
-        ranking: 2,
+        ranking: ranking,
         rankingType: timeRange, // Utilisez une valeur appropriée
         date: new Date(), // La date actuelle
       },
