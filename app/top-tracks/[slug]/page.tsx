@@ -3,10 +3,9 @@ import Image from 'next/image';
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import Link from 'next/link';
-import { TopTrack } from '@/types'
 import { PrismaClient } from "@prisma/client";
 import { authOptions } from "@/lib/auth.js";
-
+import Tracks from '@/app/top-tracks/[slug]/tracks'
 
 export default async function TopTracksPage({params} : {params : { slug: string }}) {
 
@@ -25,7 +24,6 @@ export default async function TopTracksPage({params} : {params : { slug: string 
   };
   
   const prisma = new PrismaClient();
-
   const name = session.user.name
   const userId = session.user.id
 
@@ -103,17 +101,9 @@ export default async function TopTracksPage({params} : {params : { slug: string 
         <Link className="w-4/12 rounded-lg p-2 bg-white m-1" href="/top-tracks/short_term">Last 4 weeks</Link>
         <Link className="w-4/12 rounded-lg p-2 bg-white m-1" href="/top-tracks/medium_term">Last 6 months</Link>
         <Link className="w-4/12 rounded-lg p-2 bg-white m-1" href="/top-tracks/long_term">All time</Link>
-      </div> 
-      <div className="flex flex-col md:mt-40">
-        {topTracks.map((topTrack, index) => (
-          <a href={topTrack.external_urls.spotify} target="_blank" key={topTrack.id} className="flex bg-white/70 shadow-2xl hover:scale-105 transition w-full mb-4 h-16 rounded-2xl space-x-4 items-center px-6"> 
-              <p className="text-xl font-bold">{index + 1}.</p>
-              <Image src={topTrack.album.images[0]?.url} alt={topTrack.name} className="rounded-xl" priority={true} width={45} height={45} style={{ width: 45, height: 'auto'}}  />
-              <p className="text-xl font-bold line-clamp-1"> {topTrack.name}</p>
-              <p className="text-sm text-gray-600">by {topTrack.artists.map((artist) => artist.name).join(', ')}</p>
-          </a>
-        ))}
       </div>
+
+      <Tracks topTracks={topTracks} />
     </>
   );
 }
