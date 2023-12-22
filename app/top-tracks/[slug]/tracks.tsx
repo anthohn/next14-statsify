@@ -93,7 +93,7 @@ export default function Tracks({ topTracks, rankingData }: TracksProps) {
         <div
           key={topTrack.id}
           onClick={() => openModal(topTrack)}
-          className="flex bg-white/70 shadow-2xl w-full mb-4 h-16 rounded-2xl space-x-4 items-center px-6 cursor-pointer"
+          className="flex bg-white/70 shadow-2xl w-full mb-4 h-16 rounded-2xl space-x-4 items-center px-6 cursor-pointer sm:hover:scale-105 transition"
         >
           <p className="text-xl font-bold">{index + 1}.</p>
           <Image
