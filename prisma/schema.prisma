@@ -9,14 +9,20 @@ generator client {
 }
 
 model User {
-  id     String      @unique
-  name   String      @db.Text
-  tracks UserTrack[]
+  id      String       @unique
+  name    String       @db.Text
+  tracks  UserTrack[]
+  artists UserArtist[]
 }
 
 model Track {
   id    String      @id
   users UserTrack[]
+}
+
+model Artist {
+  id    String       @id
+  users UserArtist[]
 }
 
 model UserTrack {
@@ -30,5 +36,19 @@ model UserTrack {
 
   @@id([userId, trackId, date, rankingType])
   @@index([trackId], name: "idx_track")
+  @@index([userId], name: "idx_user")
+}
+
+model UserArtist {
+  userId      String
+  artistId    String
+  ranking     Int
+  rankingType String
+  date        DateTime
+  user        User     @relation(fields: [userId], references: [id])
+  artist      Artist   @relation(fields: [artistId], references: [id])
+
+  @@id([userId, artistId, date, rankingType])
+  @@index([artistId], name: "idx_artist")
   @@index([userId], name: "idx_user")
 }

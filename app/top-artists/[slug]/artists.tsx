@@ -1,20 +1,20 @@
 'use client'
 import { useState } from 'react';
-import { TopTrack } from '@/types';
+import { Artist } from '@/types';
 import Image from 'next/image';
 import { Line } from 'react-chartjs-2';
 import 'chart.js/auto';
 
-interface TracksProps {
-  topTracks: TopTrack[];
+interface ArtistsProps {
+  topArtists: Artist[];
   rankingData: Array<{
-    trackId: string;
+    artistId: string;
     history: Array<{ date: Date; rank: number }>;
   }>;
 }
 
-export default function Tracks({ topTracks, rankingData }: TracksProps) {
-  const [selectedTrack, setSelectedTrack] = useState<TopTrack | null>(null);
+export default function Artists({ topArtists, rankingData }: ArtistsProps) {
+  const [selectedArtist, setSelectedArtist] = useState<Artist | null>(null);
 
   // Function to prepare the chart data
   const getChartData = (history: Array<{ date: Date; rank: number }>) => {
@@ -67,58 +67,53 @@ export default function Tracks({ topTracks, rankingData }: TracksProps) {
     };
   };
 
-  // Function to open the modal and set the selected track
-  const openModal = (track: TopTrack) => {
-    setSelectedTrack(track);
+  // Function to open the modal and set the selected artist
+  const openModal = (artist: Artist) => {
+    setSelectedArtist(artist);
     document.body.style.overflow = 'hidden'; // Prevent page scrolling when modal is open
   };
 
   // Function to close the modal
   const closeModal = () => {
-    setSelectedTrack(null);
+    setSelectedArtist(null);
     document.body.style.overflow = 'auto'; // Restore page scrolling when modal is closed
   };
 
-  // Find the ranking history for the selected track
-  const selectedTrackHistory = selectedTrack 
-    ? rankingData.find((data) => data.trackId === selectedTrack.id)?.history
+  // Find the ranking history for the selected artist
+  const selectedArtistHistory = selectedArtist
+    ? rankingData.find((data) => data.artistId === selectedArtist.id)?.history
     : null;
 
   return (
-    <div className="flex flex-col md:mt-40">
-      {topTracks.map((topTrack, index) => (
-        <div
-          key={topTrack.id}
-          onClick={() => openModal(topTrack)}
-          className="flex bg-white/70 shadow-2xl sm:hover:scale-105 transition w-full mb-4 h-16 rounded-2xl space-x-4 items-center px-6 cursor-pointer"
-        >
-          <p className="text-xl font-bold">{index + 1}.</p>
-          <Image
-            src={topTrack.album.images[0]?.url}
-            alt={topTrack.name}
-            className="rounded-xl"
-            priority={true}
-            width={45}
-            height={45}
-            style={{ width: 45, height: 'auto' }}
-          />
-          <p className="text-xl font-bold line-clamp-1"> {topTrack.name}</p>
-          <p className="text-sm text-gray-600">
-            by {topTrack.artists.map((artist) => artist.name).join(', ')}
-          </p>
-        </div>
-        
-      ))}
-      {selectedTrack && selectedTrackHistory && (
+    <div className="flex flex-wrap md:mt-40 justify-center">
+      {topArtists.map((topArtist, index) => (
+          <div 
+            key={topArtist.id} 
+            onClick={() => openModal(topArtist)}
+            className="flex justify-center bg-white/70 shadow-2xl hover:scale-105 transition w-60 mx-6 mb-6 h-64 rounded-xl flex-col space-y-4 items-center"
+          > 
+              <Image 
+                src={topArtist.images[0]?.url} 
+                alt={topArtist.name}
+                className="rounded-xl"
+                priority={true} 
+                width={150} 
+                height={150} 
+                style={{ width: 150, height: 'auto'}}
+              />
+              <p className="text-base font-bold line-clamp-1 mx-2">{index + 1}. {topArtist.name}</p>
+          </div>
+        ))}
+      {selectedArtist && selectedArtistHistory && (
         <div className="fixed inset-0 flex items-center justify-center z-[999] bg-black bg-opacity-50">
           <div className="bg-white rounded-lg p-8 w-full max-w-4xl h-3/4 flex flex-col justify-between">
             <div className='flex flex-col items-center'>
               <h2 className="text-2xl font-bold">Ranking History</h2>
-              <p className="text-xl">{selectedTrack.name}</p>
+              <p className="text-xl">{selectedArtist.name}</p>
             </div>
             <div className="w-full h-3/4">
               {/* Chart.js graph integration */}
-              <Line data={getChartData(selectedTrackHistory)} options={getChartOptions()} />
+              <Line data={getChartData(selectedArtistHistory)} options={getChartOptions()} />
             </div>
             <div className='flex justify-end'>
               <button

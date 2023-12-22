@@ -2,7 +2,6 @@ import getTopTracks from "@/actions/getTopTracks";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import Link from 'next/link';
-import { PrismaClient } from "@prisma/client";
 import { authOptions } from "@/lib/auth.js";
 import Tracks from '@/app/top-tracks/[slug]/tracks'
 import { db } from "@/lib/db"
@@ -23,7 +22,6 @@ export default async function TopTracksPage({params} : {params : { slug: string 
     'long_term': 'all time'
   };
   
-  // const prisma = new PrismaClient();
   const name = session.user.name
   const userId = session.user.id
 

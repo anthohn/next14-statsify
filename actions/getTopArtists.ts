@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth.js";
 import { Artist } from "@/types";
 
-const getTopArtists = async (timeRange: string = 'short_term', artistLimit: string = '30'): Promise<Artist[]> => {
+const getTopArtists = async (timeRange: string = 'short_term', artistLimit: string = '50'): Promise<Artist[]> => {
     
   const userSession  = await getServerSession(authOptions);
   const token = userSession .accessToken

@@ -3,10 +3,13 @@ import Image from "next/image";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import Link from 'next/link';
+import { authOptions } from "@/lib/auth.js";
+import Artists from '@/app/top-artists/[slug]/artists'
+import { db } from "@/lib/db"
 
 export default async function TopArtistsPage({params} : {params : { slug: string }}) {
 
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
   if (!session || !session.user) {
     redirect('/api/auth/signin')    
   }
@@ -20,6 +23,96 @@ export default async function TopArtistsPage({params} : {params : { slug: string
     'long_term': 'all time'
   };
 
+  const name = session.user.name
+  const userId = session.user.id
+
+  const existingUser = await db.user.findUnique({
+    where: {
+      id: userId,
+    },
+  });
+
+  if (!existingUser) {
+    await db.user.create({
+      data: {
+        id: userId,
+        name: name,
+      },
+    });
+  }
+
+  const today = new Date();
+  today.setUTCHours(0, 0, 0, 0); 
+
+  topArtists.map(async (topArtist, index) => {
+    const ranking = index + 1;
+
+    let artist = await db.artist.findUnique({
+      where: { id: topArtist.id },
+    });
+  
+    if (!artist) {
+      artist = await db.artist.create({
+        data: {
+          id: topArtist.id,
+        },
+      });
+    }
+
+    const existingUserArtist = await db.userArtist.findFirst({
+      where: {
+        userId: userId,
+        artistId: topArtist.id,
+        date: today,
+        rankingType: timeRange
+      },
+    });
+
+    if (!existingUserArtist) {
+      const userArtist = await db.userArtist.create({
+        data: {
+          userId: userId,
+          artistId: topArtist.id,
+          ranking: ranking,
+          rankingType: timeRange,
+          date: today,
+        },
+      });
+  
+    return { 
+      artist, 
+      userArtist
+    };
+  } 
+  else {
+    return { artist, userArtist: existingUserArtist };
+  }
+}
+);
+// Récupére les données de classement pour chaque musique
+const rankingData = await Promise.all(topArtists.map(async (artist) => {
+  const rankings = await db.userArtist.findMany({
+    where: {
+      artistId: artist.id,
+      rankingType: timeRange, // Filter by the current time range
+    },
+    orderBy: {
+      date: 'asc',
+    },
+  });
+
+  const history = rankings.map(r => ({
+    date: r.date,
+    rank: r.ranking
+  }));
+
+  return {
+    artistId: artist.id,
+    history: history,
+  };
+}));
+
+
   return (
   <>  
     <title>Top Artists - Statsify</title>
@@ -29,15 +122,9 @@ export default async function TopArtistsPage({params} : {params : { slug: string
       <Link className="w-4/12 rounded-lg p-2 bg-white m-1" href="/top-artists/medium_term">Last 6 months</Link>
       <Link className="w-4/12 rounded-lg p-2 bg-white m-1" href="/top-artists/long_term">All time</Link>
     </div> 
+    <Artists topArtists={topArtists} rankingData={rankingData} />
 
-    <div className="flex flex-wrap md:mt-40 justify-center">
-      {topArtists.map((topArtist, index) => (
-          <a href={topArtist.external_urls.spotify} target="_blank" key={topArtist.id} className="flex justify-center bg-white/70 shadow-2xl hover:scale-105 transition w-60 mx-6 mb-6 h-64 rounded-xl flex-col space-y-4 items-center"> 
-              <Image src={topArtist.images[0]?.url} alt={topArtist.name} priority={true} width={150} height={150} style={{ width: 150, height: 'auto'}} className="rounded-xl" />
-              <p className="text-base font-bold line-clamp-1 mx-2">{index + 1}. {topArtist.name}</p>
-          </a>
-        ))}
-    </div>
+    
   </>
   )
 }
