@@ -36,47 +36,43 @@ export default function Artists({ topArtists, rankingData }: ArtistsProps) {
     return {
       scales: {
         y: {
-          reverse: true, // Cela inverse l'axe des y
-          beginAtZero: false, // Démarre l'échelle à la première valeur si vous ne voulez pas qu'elle commence à zéro
+          reverse: true,
+          beginAtZero: false,
           title: {
             display: true,
             text: 'Rank'
           },
           ticks: {
-            stepSize: 10, // Définit un pas fixe entre les graduations
-            // Affiche seulement les ticks aux valeurs définies
+            stepSize: 10,
             callback: function(value: number | string, index: number, values: any[]) {
-              // On utilise un ensemble de valeurs prédéfinies pour les graduations
               const allowedTicks = [1, 10, 20, 30, 40, 50];
               if (allowedTicks.includes(Number(value))) {
                 return 'Rank ' + value;
               }
             }
           },
-          // Pour vous assurer que l'axe des y inclut 1 et 50, vous pouvez définir les limites min et max
           min: 1,
           max: 50,
         }
       },
-      // Vous pouvez également ajouter d'autres options de configuration ici
       plugins: {
         legend: {
-          display: false // Cache la légende si vous n'en avez pas besoin
+          display: false
         }
       }
     };
   };
 
-  // Function to open the modal and set the selected artist
+  // Function open the modal and set the selected artist
   const openModal = (artist: Artist) => {
     setSelectedArtist(artist);
-    document.body.style.overflow = 'hidden'; // Prevent page scrolling when modal is open
+    document.body.style.overflow = 'hidden'; 
   };
 
   // Function to close the modal
   const closeModal = () => {
     setSelectedArtist(null);
-    document.body.style.overflow = 'auto'; // Restore page scrolling when modal is closed
+    document.body.style.overflow = 'auto';
   };
 
   // Find the ranking history for the selected artist

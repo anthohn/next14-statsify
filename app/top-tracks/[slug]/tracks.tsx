@@ -31,37 +31,34 @@ export default function Tracks({ topTracks, rankingData }: TracksProps) {
       ],
     };
   };
-//   chart data options
+//  chart data options
   const getChartOptions = () => {
     return {
       scales: {
         y: {
-          reverse: true, // Cela inverse l'axe des y
-          beginAtZero: false, // Démarre l'échelle à la première valeur si vous ne voulez pas qu'elle commence à zéro
+          reverse: true, // inverse l'axe des y
+          beginAtZero: false, // Démarr l'échelle à la première valeur
           title: {
             display: true,
             text: 'Rank'
           },
           ticks: {
-            stepSize: 10, // Définit un pas fixe entre les graduations
-            // Affiche seulement les ticks aux valeurs définies
+            stepSize: 10, //  as fixe entre les graduations
             callback: function(value: number | string, index: number, values: any[]) {
-              // On utilise un ensemble de valeurs prédéfinies pour les graduations
+              // utilise un ensemble de valeurs prédéfinies pour les graduations
               const allowedTicks = [1, 10, 20, 30, 40, 50];
               if (allowedTicks.includes(Number(value))) {
                 return 'Rank ' + value;
               }
             }
           },
-          // Pour vous assurer que l'axe des y inclut 1 et 50, vous pouvez définir les limites min et max
           min: 1,
           max: 50,
         }
       },
-      // Vous pouvez également ajouter d'autres options de configuration ici
       plugins: {
         legend: {
-          display: false // Cache la légende si vous n'en avez pas besoin
+          display: false
         }
       }
     };
@@ -70,13 +67,19 @@ export default function Tracks({ topTracks, rankingData }: TracksProps) {
   // Function to open the modal and set the selected track
   const openModal = (track: TopTrack) => {
     setSelectedTrack(track);
-    document.body.style.overflow = 'hidden'; // Prevent page scrolling when modal is open
+    document.body.style.overflow = 'hidden';
   };
 
   // Function to close the modal
   const closeModal = () => {
     setSelectedTrack(null);
-    document.body.style.overflow = 'auto'; // Restore page scrolling when modal is closed
+    document.body.style.overflow = 'auto';
+  };
+  // Si l'élément cliqué est la div de fond du modal ferme le modal
+  const handleModalClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      closeModal();
+    }
   };
 
   // Find the ranking history for the selected track
@@ -90,7 +93,7 @@ export default function Tracks({ topTracks, rankingData }: TracksProps) {
         <div
           key={topTrack.id}
           onClick={() => openModal(topTrack)}
-          className="flex bg-white/70 shadow-2xl sm:hover:scale-105 transition w-full mb-4 h-16 rounded-2xl space-x-4 items-center px-6 cursor-pointer"
+          className="flex bg-white/70 shadow-2xl w-full mb-4 h-16 rounded-2xl space-x-4 items-center px-6 cursor-pointer"
         >
           <p className="text-xl font-bold">{index + 1}.</p>
           <Image
@@ -110,22 +113,27 @@ export default function Tracks({ topTracks, rankingData }: TracksProps) {
         
       ))}
       {selectedTrack && selectedTrackHistory && (
-        <div className="fixed inset-0 flex items-center justify-center z-[999] bg-black bg-opacity-50">
-          <div className="bg-white rounded-lg p-8 w-full max-w-4xl h-3/4 flex flex-col justify-between">
+        <div className="fixed inset-0 flex items-center justify-center z-[999] bg-black bg-opacity-50" onClick={handleModalClick}>
+          <div className="bg-white rounded-lg p-8 w-full max-w-3xl flex flex-col">
             <div className='flex flex-col items-center'>
-              <h2 className="text-2xl font-bold">Ranking History</h2>
+              <h2 className="text-2xl font-bold">Ranking History</h2>              
               <p className="text-xl">{selectedTrack.name}</p>
             </div>
-            <div className="w-full h-3/4">
+            <div className="w-full h-2/4">
               {/* Chart.js graph integration */}
               <Line data={getChartData(selectedTrackHistory)} options={getChartOptions()} />
             </div>
-            <div className='flex justify-end'>
-              <button
-                onClick={closeModal}
-                className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 mt-4 w-32 rounded-xl  transition">
-                Close
-              </button>
+            <div className='flex justify-between items-center'>
+              <a href={selectedTrack.external_urls.spotify} target="_blank" className="flex items-center bg-green-600 text-center hover:bg-green-700 text-white px-4 py-2 mt-4 w-32 rounded-xl  transition">
+                <p>Open in</p>
+                <svg xmlns="http://www.w3.org/2000/svg" height="30" width="30" viewBox="-33.4974 -55.829 290.3108 334.974"><path d="M177.707 98.987c-35.992-21.375-95.36-23.34-129.719-12.912-5.519 1.674-11.353-1.44-13.024-6.958-1.672-5.521 1.439-11.352 6.96-13.029 39.443-11.972 105.008-9.66 146.443 14.936 4.964 2.947 6.59 9.356 3.649 14.31-2.944 4.963-9.359 6.6-14.31 3.653m-1.178 31.658c-2.525 4.098-7.883 5.383-11.975 2.867-30.005-18.444-75.762-23.788-111.262-13.012-4.603 1.39-9.466-1.204-10.864-5.8a8.717 8.717 0 015.805-10.856c40.553-12.307 90.968-6.347 125.432 14.833 4.092 2.52 5.38 7.88 2.864 11.968m-13.663 30.404a6.954 6.954 0 01-9.569 2.316c-26.22-16.025-59.223-19.644-98.09-10.766a6.955 6.955 0 01-8.331-5.232 6.95 6.95 0 015.233-8.334c42.533-9.722 79.017-5.538 108.448 12.446a6.96 6.96 0 012.31 9.57M111.656 0C49.992 0 0 49.99 0 111.656c0 61.672 49.992 111.66 111.657 111.66 61.668 0 111.659-49.988 111.659-111.66C223.316 49.991 173.326 0 111.657 0" fill="#FFFFFF"/></svg>
+              </a>
+              <button onClick={closeModal} className="bg-green-600 hover:bg-green-700 h-10 w-10 text-white rounded-xl transition justify-center flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+                  </svg>
+                </button>
+             
             </div>
           </div>
         </div>
