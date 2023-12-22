@@ -112,19 +112,16 @@ const rankingData = await Promise.all(topArtists.map(async (artist) => {
   };
 }));
 
-
   return (
   <>  
     <title>Top Artists - Statsify</title>
     <h1 className="text-center text-4xl font-semibold p-4 mx-auto mt-12 sm:mt-40">Top Artists ({timeRangeDescriptions[timeRange as keyof typeof timeRangeDescriptions] || timeRange})</h1>
-    <div className="flex justify-between text-center mb-4">
-      <Link className="w-4/12 rounded-lg p-2 bg-white m-1" href="/top-artists/short_term">Last 4 weeks</Link>
-      <Link className="w-4/12 rounded-lg p-2 bg-white m-1" href="/top-artists/medium_term">Last 6 months</Link>
-      <Link className="w-4/12 rounded-lg p-2 bg-white m-1" href="/top-artists/long_term">All time</Link>
+    <div className="flex flex-col sm:flex-row justify-between text-center mb-4">
+      <Link className="sm:w-4/12 rounded-lg p-2 bg-white m-1" href="/top-artists/short_term">Last 4 weeks</Link>
+      <Link className="sm:w-4/12 rounded-lg p-2 bg-white m-1" href="/top-artists/medium_term">Last 6 months</Link>
+      <Link className="sm:w-4/12 rounded-lg p-2 bg-white m-1" href="/top-artists/long_term">All time</Link>
     </div> 
-    <Artists topArtists={topArtists} rankingData={rankingData} />
-
-    
+    <Artists topArtists={topArtists} rankingData={rankingData} />    
   </>
   )
 }

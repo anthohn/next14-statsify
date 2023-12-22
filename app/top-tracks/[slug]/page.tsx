@@ -120,11 +120,11 @@ export default async function TopTracksPage({params} : {params : { slug: string 
   return (
     <>
       <title>Top Tracks - Statsify</title>
-      <h1 className="text-center text-4xl font-semibold p-4 mx-auto mt-12 sm:mt-40">Top Tracks ({timeRangeDescriptions[timeRange as keyof typeof timeRangeDescriptions] || timeRange})</h1>
-      <div className="flex justify-between text-center mb-4">
-        <Link className="w-4/12 rounded-lg p-2 bg-white m-1" href="/top-tracks/short_term">Last 4 weeks</Link>
-        <Link className="w-4/12 rounded-lg p-2 bg-white m-1" href="/top-tracks/medium_term">Last 6 months</Link>
-        <Link className="w-4/12 rounded-lg p-2 bg-white m-1" href="/top-tracks/long_term">All time</Link>
+      <h1 className="text-center text-4xl font-semibold p-4 mx-auto mt-12 sm:mt-40 w-full">Top Tracks ({timeRangeDescriptions[timeRange as keyof typeof timeRangeDescriptions] || timeRange})</h1>
+      <div className="flex flex-col sm:flex-row justify-between text-center mb-4">
+        <Link className="sm:w-4/12 rounded-lg p-2 bg-white m-1" href="/top-tracks/short_term">Last 4 weeks</Link>
+        <Link className="sm:w-4/12 rounded-lg p-2 bg-white m-1" href="/top-tracks/medium_term">Last 6 months</Link>
+        <Link className="sm:w-4/12 rounded-lg p-2 bg-white m-1" href="/top-tracks/long_term">All time</Link>
       </div>
       <Tracks topTracks={topTracks} rankingData={rankingData} />
     </>
