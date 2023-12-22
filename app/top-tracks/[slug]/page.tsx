@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { PrismaClient } from "@prisma/client";
 import { authOptions } from "@/lib/auth.js";
 import Tracks from '@/app/top-tracks/[slug]/tracks'
+import { db } from "@/lib/db"
 
 export default async function TopTracksPage({params} : {params : { slug: string }}) {
 
@@ -22,12 +23,12 @@ export default async function TopTracksPage({params} : {params : { slug: string 
     'long_term': 'all time'
   };
   
-  const prisma = new PrismaClient();
+  // const prisma = new PrismaClient();
   const name = session.user.name
   const userId = session.user.id
 
   // Vérifie d'abord si l'utilisateur existe déjà dans la bdd
-  const existingUser = await prisma.user.findUnique({
+  const existingUser = await db.user.findUnique({
     where: {
       id: userId,
     },
@@ -35,7 +36,7 @@ export default async function TopTracksPage({params} : {params : { slug: string 
 
   // Si l'utilisateur n'existe pas, créer
   if (!existingUser) {
-    await prisma.user.create({
+    await db.user.create({
       data: {
         id: userId,
         name: name,
@@ -46,16 +47,16 @@ export default async function TopTracksPage({params} : {params : { slug: string 
   today.setUTCHours(0, 0, 0, 0); 
 
   topTracks.map(async (topTrack, index) => {
-  // L'index commence à 0, donc ajoutez 1 pour commencer le classement à 1
+    // L'index commence à 0, donc ajoutez 1 pour commencer le classement à 1
     const ranking = index + 1;
 
     // Vérifie d'abord si la piste existe déjà pour éviter les doublons
-    let track = await prisma.track.findUnique({
+    let track = await db.track.findUnique({
       where: { id: topTrack.id },
     });
   
     if (!track) {
-      track = await prisma.track.create({
+      track = await db.track.create({
         data: {
           id: topTrack.id,
         },
@@ -63,7 +64,7 @@ export default async function TopTracksPage({params} : {params : { slug: string 
     }
   
     // Vérifie si un enregistrement existe déjà pour aujourd'hui
-    const existingUserTrack = await prisma.userTrack.findFirst({
+    const existingUserTrack = await db.userTrack.findFirst({
       where: {
         userId: userId,
         trackId: topTrack.id,
@@ -72,11 +73,9 @@ export default async function TopTracksPage({params} : {params : { slug: string 
       },
     });
 
-    console.log(existingUserTrack)
-
   if (!existingUserTrack) {
     // relation utilisateur-piste dans la table userTrack
-    const userTrack = await prisma.userTrack.create({
+    const userTrack = await db.userTrack.create({
       data: {
         userId: userId,
         trackId: topTrack.id,
@@ -99,7 +98,7 @@ export default async function TopTracksPage({params} : {params : { slug: string 
 
   // Récupére les données de classement pour chaque musique
   const rankingData = await Promise.all(topTracks.map(async (track) => {
-    const rankings = await prisma.userTrack.findMany({
+    const rankings = await db.userTrack.findMany({
       where: {
         trackId: track.id,
         rankingType: timeRange, // Filter by the current time range
