@@ -24,11 +24,11 @@ model UserTrack {
   trackId     String
   ranking     Int
   rankingType String
-  date        DateTime @default(now())
+  date        DateTime
   user        User     @relation(fields: [userId], references: [id])
   track       Track    @relation(fields: [trackId], references: [id])
 
-  @@id([userId, trackId, date])
+  @@id([userId, trackId, date, rankingType])
   @@index([trackId], name: "idx_track")
   @@index([userId], name: "idx_user")
 }

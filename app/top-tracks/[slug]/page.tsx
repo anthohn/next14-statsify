@@ -43,7 +43,7 @@ export default async function TopTracksPage({params} : {params : { slug: string 
     });
   }
   const today = new Date();
-  today.setHours(0, 0, 0, 0); // l'heure au début de la journée
+  today.setUTCHours(0, 0, 0, 0); 
 
   topTracks.map(async (topTrack, index) => {
   // L'index commence à 0, donc ajoutez 1 pour commencer le classement à 1
@@ -65,13 +65,14 @@ export default async function TopTracksPage({params} : {params : { slug: string 
     // Vérifie si un enregistrement existe déjà pour aujourd'hui
     const existingUserTrack = await prisma.userTrack.findFirst({
       where: {
-        userId: userId, 
-        AND: [
-          { trackId: topTrack.id },
-          { rankingType: timeRange }
-        ]
+        userId: userId,
+        trackId: topTrack.id,
+        date: today,
+        rankingType: timeRange
       },
     });
+
+    console.log(existingUserTrack)
 
   if (!existingUserTrack) {
     // relation utilisateur-piste dans la table userTrack
@@ -81,15 +82,20 @@ export default async function TopTracksPage({params} : {params : { slug: string 
         trackId: topTrack.id,
         ranking: ranking,
         rankingType: timeRange,
-        date: new Date(),
+        date: today,
       },
     });
 
-    return { track, userTrack };
-  } else {
+    return { 
+      track, 
+      userTrack
+    };
+  } 
+  else {
     return { track, userTrack: existingUserTrack };
   }
-});
+}
+);
 
   // Récupére les données de classement pour chaque musique
   const rankingData = await Promise.all(topTracks.map(async (track) => {
