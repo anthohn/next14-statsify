@@ -4,7 +4,7 @@ import HomeButton  from "@/app/components/HomeButton";
 export default async function HomeSection() {
   return (
     <>
-      <div className="flex flex-col items-center justify-center w-full mx-auto mt-12 sm:mt-44 py-12 bg-neutral-50/70 rounded-2xl shadow-2xl">
+      <div className="flex flex-col items-center justify-center w-full mx-auto mt-12 sm:mt-44 py-12 bg-neutral-50/70 rounded-2xl shadow-2xl ">
         <h1 className="text-4xl mb-6 font-semibold text-center">Personal Spotify Statistics</h1>
         <HomeButton />
       </div>
