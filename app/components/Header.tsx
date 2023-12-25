@@ -88,14 +88,15 @@ export default function Header() {
             </Link>
             <AuthButton />            
             <div id="dropdownAvatar" className="z-10 hidden border bg-white rounded-2xl w-48 shadow-2xl">
-              <ul className="py-1 text-[13px] text-neutral-800 font-semibold" aria-labelledby="dropdownUserAvatarButton">
-                <li className="flex justify-between hover:bg-neutral-200 mx-1 items-center px-4 rounded-t-2xl">
-                    <a href="https://www.spotify.com/account" className="block py-2">Compte</a>
-                    <svg data-encore-id="icon" role="img" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M1 2.75A.75.75 0 0 1 1.75 2H7v1.5H2.5v11h10.219V9h1.5v6.25a.75.75 0 0 1-.75.75H1.75a.75.75 0 0 1-.75-.75V2.75z"></path><path d="M15 1v4.993a.75.75 0 1 1-1.5 0V3.56L8.78 8.28a.75.75 0 0 1-1.06-1.06l4.72-4.72h-2.433a.75.75 0 0 1 0-1.5H15z"></path></svg>
+              <ul className="py-1 text-[13px] text-neutral-800 font-medium" aria-labelledby="dropdownUserAvatarButton">
+                <li>
+                    <a href="https://www.spotify.com/account" className="py-2 flex justify-between mx-1 items-center px-4 rounded-t-2xl transition hover:bg-neutral-200">Compte
+                      <svg data-encore-id="icon" role="img" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M1 2.75A.75.75 0 0 1 1.75 2H7v1.5H2.5v11h10.219V9h1.5v6.25a.75.75 0 0 1-.75.75H1.75a.75.75 0 0 1-.75-.75V2.75z"></path><path d="M15 1v4.993a.75.75 0 1 1-1.5 0V3.56L8.78 8.28a.75.75 0 0 1-1.06-1.06l4.72-4.72h-2.433a.75.75 0 0 1 0-1.5H15z"></path></svg>
+                    </a>
                 </li>
                 <hr className="h-px bg-neutral-200 border-0 mx-1"></hr>
                 <li>
-                    <a className="block px-4 py-2 hover:bg-neutral-200 rounded-b-2xl mx-1" onClick={() => signOut()}>Déconnexion</a>
+                    <a className="block px-4 py-2 hover:bg-neutral-200 rounded-b-2xl mx-1 transition cursor-pointer" onClick={() => signOut()}>Déconnexion</a>
                 </li>
               </ul>
             </div>
