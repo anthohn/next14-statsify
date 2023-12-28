@@ -23,9 +23,11 @@ export default async function TopArtistsPage({params} : {params : { slug: string
     'long_term': 'all time'
   };
 
+  // get name and userId
   const name = session.user.name
   const userId = session.user.id
 
+  // check if user exist, if not create in prisma
   const existingUser = await db.user.findUnique({
     where: {
       id: userId,
@@ -41,35 +43,37 @@ export default async function TopArtistsPage({params} : {params : { slug: string
     });
   }
 
+  // set utc hours today
   const today = new Date();
   today.setUTCHours(0, 0, 0, 0); 
 
-  topArtists.map(async (topArtist, index) => {
-    const ranking = index + 1;
+  // Vérifier si les données existent déjà pour cet utilisateur et cette date
+  const dataExists = await db.userArtist.count({
+    where: {
+      userId: userId,
+      date: today,
+      rankingType: timeRange,
+    },
+  }) > 0
 
-    let artist = await db.artist.findUnique({
-      where: { id: topArtist.id },
-    });
-  
-    if (!artist) {
-      artist = await db.artist.create({
-        data: {
-          id: topArtist.id,
-        },
+  if (!dataExists) {
+
+    topArtists.map(async (topArtist, index) => {
+      const ranking = index + 1;
+
+      let artist = await db.artist.findUnique({
+        where: { id: topArtist.id },
       });
-    }
+    
+      if (!artist) {
+        artist = await db.artist.create({
+          data: {
+            id: topArtist.id,
+          },
+        });
+      }
 
-    const existingUserArtist = await db.userArtist.findFirst({
-      where: {
-        userId: userId,
-        artistId: topArtist.id,
-        date: today,
-        rankingType: timeRange
-      },
-    });
-
-    if (!existingUserArtist) {
-      const userArtist = await db.userArtist.create({
+      await db.userArtist.create({
         data: {
           userId: userId,
           artistId: topArtist.id,
@@ -78,39 +82,31 @@ export default async function TopArtistsPage({params} : {params : { slug: string
           date: today,
         },
       });
-  
-    return { 
-      artist, 
-      userArtist
-    };
-  } 
-  else {
-    return { artist, userArtist: existingUserArtist };
+    });  
   }
-}
-);
-// Récupére les données de classement pour chaque musique
-const rankingData = await Promise.all(topArtists.map(async (artist) => {
-  const rankings = await db.userArtist.findMany({
-    where: {
+
+  // Récupére les données de classement pour chaque musique
+  const rankingData = await Promise.all(topArtists.map(async (artist) => {
+    const rankings = await db.userArtist.findMany({
+      where: {
+        artistId: artist.id,
+        rankingType: timeRange, // Filter by the current time range
+      },
+      orderBy: {
+        date: 'asc',
+      },
+    });
+
+    const history = rankings.map(r => ({
+      date: r.date,
+      rank: r.ranking
+    }));
+
+    return {
       artistId: artist.id,
-      rankingType: timeRange, // Filter by the current time range
-    },
-    orderBy: {
-      date: 'asc',
-    },
-  });
-
-  const history = rankings.map(r => ({
-    date: r.date,
-    rank: r.ranking
+      history: history,
+    };
   }));
-
-  return {
-    artistId: artist.id,
-    history: history,
-  };
-}));
 
   return (
   <>  

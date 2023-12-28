@@ -14,6 +14,25 @@ interface ArtistsProps {
 }
 
 export default function Artists({ topArtists, rankingData }: ArtistsProps) {
+
+  //calcul si monte ou descend dans le classement
+  const calculateTrend = (artistId: string) => {
+    const history = rankingData.find((data) => data.artistId === artistId)?.history;
+    if (history && history.length >= 3) {
+      const lastRank = history[history.length - 1].rank;
+      const previousRank = history[history.length - 3].rank;
+      return lastRank - previousRank;
+    }
+    return 0;
+  };
+
+  // calcul si la musique est nouvelle dans le classement
+  const isNewArtist = (artistId: string) => {
+    const history = rankingData.find((data) => data.artistId === artistId)?.history;
+    return history && history.length < 3;
+  };
+
+
   const [selectedArtist, setSelectedArtist] = useState<Artist | null>(null);
 
   // Function to prepare the chart data
@@ -85,15 +104,17 @@ export default function Artists({ topArtists, rankingData }: ArtistsProps) {
   const selectedArtistHistory = selectedArtist
     ? rankingData.find((data) => data.artistId === selectedArtist.id)?.history
     : null;
-
   return (
     <div className="flex flex-wrap md:mt-40 justify-center">
-      {topArtists.map((topArtist, index) => (
-        <div 
-          key={topArtist.id} 
-          onClick={() => openModal(topArtist)}
-          className="flex justify-center bg-white/70 shadow-2xl hover:scale-105 transition w-60 mx-6 mb-6 h-64 rounded-xl flex-col space-y-4 items-center cursor-pointer"
-        > 
+      {topArtists.map((topArtist, index) => {
+        const trend = calculateTrend(topArtist.id);
+        const isNew = isNewArtist(topArtist.id);
+        return(
+          <div 
+            key={topArtist.id} 
+            onClick={() => openModal(topArtist)}
+            className="flex justify-center bg-white/70 shadow-2xl hover:scale-105 transition w-60 mx-6 mb-6 h-64 rounded-xl flex-col space-y-4 items-center cursor-pointer"
+          >
           <Image 
             src={topArtist.images[0]?.url} 
             alt={topArtist.name}
@@ -103,9 +124,35 @@ export default function Artists({ topArtists, rankingData }: ArtistsProps) {
             height={150} 
             style={{ width: 150, height: 'auto'}}
           />
+          <div className='flex items-center'>
+            <div>
+              {isNew && 
+                <span className="new-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="#4687D6" viewBox="0 0 16 16">
+                    <circle cx="8" cy="8" r="8"/>
+                  </svg>
+                </span>
+              }
+              {trend < 0 && 
+                <span className="trend-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#16A34A" viewBox="0 0 16 16">
+                    <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
+                  </svg>
+                </span>
+              }
+              {trend > 0 && 
+                <span className="trend-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#D71A2B" viewBox="0 0 16 16">
+                    <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                  </svg>
+                </span>
+              }
+            </div>
             <p className="text-base font-bold line-clamp-1 mx-2">{index + 1}. {topArtist.name}</p>
+          </div>
         </div>
-      ))}
+        );
+      })}
       {selectedArtist && selectedArtistHistory && (
         <div className="fixed inset-0 flex items-center justify-center z-[999] bg-black bg-opacity-50" onClick={handleModalClick}>
           <div className="bg-white rounded-lg p-8 w-full max-w-3xl flex flex-col justify-between">

@@ -109,9 +109,6 @@ export default function Tracks({ topTracks, rankingData }: TracksProps) {
         {topTracks.map((topTrack, index) => {
           const trend = calculateTrend(topTrack.id);
           const isNew = isNewTrack(topTrack.id);
-          console.log(topTrack.name)
-          console.log(isNew)
-    
           return (
             <div
               key={topTrack.id}
@@ -124,7 +121,8 @@ export default function Tracks({ topTracks, rankingData }: TracksProps) {
                     <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="#4687D6" viewBox="0 0 16 16">
                       <circle cx="8" cy="8" r="8"/>
                     </svg>
-                  </span>}
+                  </span>
+                }
                 {trend < 0 && 
                   <span className="trend-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#16A34A" viewBox="0 0 16 16">
