@@ -25,14 +25,12 @@ export default async function TopTracksPage({params} : {params : { slug: string 
   const name = session.user.name
   const userId = session.user.id
 
-  // Vérifie d'abord si l'utilisateur existe déjà dans la bdd
+  // check if user exist, if not create in prisma
   const existingUser = await db.user.findUnique({
     where: {
       id: userId,
     },
   });
-
-  // Si l'utilisateur n'existe pas, créer
   if (!existingUser) {
     await db.user.create({
       data: {
@@ -42,57 +40,49 @@ export default async function TopTracksPage({params} : {params : { slug: string 
     });
   }
   const today = new Date();
-  today.setUTCHours(0, 0, 0, 0); 
+  today.setUTCHours(0, 0, 0, 0);
 
-  topTracks.map(async (topTrack, index) => {
-    // L'index commence à 0, donc ajoutez 1 pour commencer le classement à 1
-    const ranking = index + 1;
+  // Vérifier si les données existent déjà pour cet utilisateur et cette date
+  const dataExists = await db.userTrack.count({
+    where: {
+      userId: userId,
+      date: today,
+      rankingType: timeRange,
+    },
+  }) > 0
 
-    // Vérifie d'abord si la piste existe déjà pour éviter les doublons
-    let track = await db.track.findUnique({
-      where: { id: topTrack.id },
-    });
-  
-    if (!track) {
-      track = await db.track.create({
+
+  if (!dataExists) {
+
+    topTracks.map(async (topTrack, index) => {
+      // L'index commence à 0, donc ajoutez 1 pour commencer le classement à 1
+      const ranking = index + 1;
+
+      // Vérifie d'abord si la piste existe déjà pour éviter les doublons
+      let track = await db.track.findUnique({
+        where: { id: topTrack.id },
+      });
+    
+      if (!track) {
+        track = await db.track.create({
+          data: {
+            id: topTrack.id,
+          },
+        });
+      }
+ 
+      // relation utilisateur-piste dans la table userTrack
+      await db.userTrack.create({
         data: {
-          id: topTrack.id,
+          userId: userId,
+          trackId: topTrack.id,
+          ranking: ranking,
+          rankingType: timeRange,
+          date: today,
         },
       });
-    }
-  
-    // Vérifie si un enregistrement existe déjà pour aujourd'hui
-    const existingUserTrack = await db.userTrack.findFirst({
-      where: {
-        userId: userId,
-        trackId: topTrack.id,
-        date: today,
-        rankingType: timeRange
-      },
     });
-
-  if (!existingUserTrack) {
-    // relation utilisateur-piste dans la table userTrack
-    const userTrack = await db.userTrack.create({
-      data: {
-        userId: userId,
-        trackId: topTrack.id,
-        ranking: ranking,
-        rankingType: timeRange,
-        date: today,
-      },
-    });
-
-    return { 
-      track, 
-      userTrack
-    };
-  } 
-  else {
-    return { track, userTrack: existingUserTrack };
   }
-}
-);
 
   // Récupére les données de classement pour chaque musique
   const rankingData = await Promise.all(topTracks.map(async (track) => {
